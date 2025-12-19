@@ -1,0 +1,7 @@
+content:
+  - name: Content
+    path: src/content
+    type: collection
+    fields:
+      - name: body
+        type: markdown
