@@ -1,0 +1,74 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Card from '@/components/ui/Card.astro';
+import CardContent from '@/components/ui/CardContent.astro';
+
+const blogPosts = [
+  {
+    title: "Managing Employee Leave: Employers' Key Responsibilities",
+    author: 'John Doe',
+    date: 'April 24, 2024',
+    excerpt: 'We help you set up HR without hiring full-time.',
+    image: 'bg-gradient-card',
+  },
+  {
+    title: 'Top 3 HR Mistakes Small Businesses Should Avoid',
+    author: 'John Doe',
+    date: 'April 24, 2024',
+    excerpt: 'Leamptiantling by aligning with CA labor law.',
+    image: 'bg-gradient-card',
+  },
+  {
+    title: 'Exempt v. Non-Exempt Employees: Understand the Difference',
+    author: 'John Doe',
+    date: 'April 24, 2024',
+    excerpt:
+      'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    image: 'bg-gradient-card',
+  },
+];
+---
+
+<section class="bg-muted/30 w-full px-6 py-16">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-12 text-center">
+      <h2 class="text-foreground mb-4 text-3xl font-bold md:text-5xl">
+        HR Matters Blog
+      </h2>
+      <p class="text-muted-foreground mx-auto max-w-3xl text-xl">
+        Real stories from an employer's perspective. Practical insights on what
+        to do (and what to avoid) in HR management, shared to help SMBs navigate
+        common challenges.
+      </p>
+    </div>
+
+    <div class="mb-12 grid gap-8 md:grid-cols-3">
+      {
+        blogPosts.map((post, index) => (
+          <Card class="shadow-card space-y-4 overflow-hidden border-0">
+            <div class={`h-48 ${post.image}`} />
+            <CardContent class="p-6">
+              <h3 class="text-foreground mb-3 text-xl leading-tight font-semibold">
+                {post.title}
+              </h3>
+              <div class="text-muted-foreground mb-3 text-sm">
+                {post.date} • {post.author}
+              </div>
+              <p class="text-muted-foreground">{post.excerpt}</p>
+            </CardContent>
+          </Card>
+        ))
+      }
+    </div>
+
+    <div class="text-center">
+      <Button
+        variant="default"
+        size="lg"
+        class="bg-gradient-primary text-primary-foreground shadow-button"
+      >
+        View All Posts
+      </Button>
+    </div>
+  </div>
+</section>

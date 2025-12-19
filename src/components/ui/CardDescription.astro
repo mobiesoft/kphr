@@ -1,0 +1,19 @@
+---
+interface Props {
+  class?: string;
+  [key: string]: any;
+}
+
+const { class: className, ...attrs } = Astro.props as Props;
+
+function cn(...vals: Array<string | false | null | undefined>) {
+  return vals.filter(Boolean).join(' ');
+}
+
+const base = 'text-sm text-muted-foreground';
+const classes = cn(base, className);
+---
+
+<p class={classes} {...attrs}>
+  <slot />
+</p>

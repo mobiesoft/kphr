@@ -1,0 +1,50 @@
+---
+import { Users, FileText, TriangleAlert } from '@lucide/astro';
+import Card from '@/components/ui/Card.astro';
+import CardContent from '@/components/ui/CardContent.astro';
+
+// Store component references in frontmatter (no JSX in frontmatter)
+const services = [
+  {
+    icon: Users,
+    title: 'No HR Team?',
+    description: 'We help you set up HR without hiring full time',
+  },
+  {
+    icon: FileText,
+    title: 'Confused by Documents?',
+    description: 'From offer letters to termination forms—we got it',
+  },
+  {
+    icon: TriangleAlert,
+    title: 'Worried About Compliance?',
+    description: 'Avoid penalties by aligning with CX labor law.',
+  },
+];
+---
+
+<section class="w-full px-6 py-16">
+  <div class="mx-auto max-w-6xl">
+    <h2
+      class="text-foreground mb-12 text-center text-3xl font-bold md:text-4xl"
+    >
+      Who We Help
+    </h2>
+
+    <div class="grid gap-8 md:grid-cols-3">
+      {
+        services.map(({ icon: Icon, title, description }) => (
+          <Card class="bg-gradient-card shadow-card border-0 p-6 text-center">
+            <CardContent class="pt-6">
+              <div class="mb-4 flex justify-center">
+                <Icon class="h-12 w-12 text-white" />
+              </div>
+              <h3 class="mb-4 text-xl font-semibold text-white">{title}</h3>
+              <p class="leading-relaxed text-white/90">{description}</p>
+            </CardContent>
+          </Card>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,43 @@
+---
+import '@/styles/global.css';
+import Meta from '@/components/global/Meta.astro';
+import Navigation from '@/components/global/Navigation.astro';
+import Footer from '@/components/global/Footer.astro';
+
+interface Props {
+  title: string;
+  meta?: string;
+  structuredData?: object;
+  preloadImage?: {
+    src: string;
+    srcset?: string;
+    sizes?: string;
+    type?: string;
+  };
+}
+
+const { title, meta, structuredData, preloadImage } = Astro.props as Props;
+const pageTitle = (title ?? '')
+  .replace(/<[^>]*>/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Meta title={pageTitle} meta={meta} structuredData={structuredData} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <main>
+      <div class="bg-background min-h-screen">
+        <Navigation />
+        <slot />
+        <section id="contact">
+          <Footer />
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

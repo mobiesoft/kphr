@@ -1,0 +1,41 @@
+---
+import { Image } from 'astro:assets';
+import Button from '@/components/ui/Button.astro';
+import mainLogo from '@/images/main-logo.png';
+---
+
+<nav class="bg-background border-border w-full border-b px-6 py-4">
+  <div class="mx-auto flex max-w-7xl items-center justify-between">
+    <Image src={mainLogo} alt="KPHR Logo" width={200} class="h-10 w-auto" />
+
+    <div class="hidden items-center space-x-8 md:flex">
+      <a href="/" class="text-foreground hover:text-primary transition-colors">
+        Home
+      </a>
+      <a
+        href="#about"
+        class="text-foreground hover:text-primary transition-colors"
+      >
+        About
+      </a>
+      <a
+        href="#blog"
+        class="text-foreground hover:text-primary transition-colors"
+      >
+        Blog
+      </a>
+      <a
+        href="#contact"
+        class="text-foreground hover:text-primary transition-colors"
+      >
+        Contact
+      </a>
+      <Button
+        href="/request-va"
+        class="bg-gradient-primary text-primary-foreground shadow-button hover:opacity-90"
+      >
+        Request VA
+      </Button>
+    </div>
+  </div>
+</nav>

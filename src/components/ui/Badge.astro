@@ -1,0 +1,57 @@
+---
+// Astro version of the React Badge with the same styles/variants
+
+type Variant = 'default' | 'secondary' | 'destructive' | 'outline';
+
+interface Props {
+  variant?: Variant;
+  as?: 'div' | 'span' | 'a';
+  href?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  variant = 'default',
+  as = 'div',
+  href,
+  class: className,
+  ...attrs
+} = Astro.props as Props;
+
+function cn(...vals: Array<string | false | null | undefined>) {
+  return vals.filter(Boolean).join(' ');
+}
+
+const base =
+  'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2';
+
+const variantClasses: Record<Variant, string> = {
+  default:
+    'border-transparent bg-primary text-primary-foreground hover:bg-primary/80',
+  secondary:
+    'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
+  destructive:
+    'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
+  outline: 'text-foreground',
+};
+
+const classes = cn(base, variantClasses[variant], className);
+const tag = as ?? (href ? 'a' : 'div');
+---
+
+{
+  tag === 'a' ? (
+    <a href={href} class={classes} {...attrs}>
+      <slot />
+    </a>
+  ) : tag === 'span' ? (
+    <span class={classes} {...attrs}>
+      <slot />
+    </span>
+  ) : (
+    <div class={classes} {...attrs}>
+      <slot />
+    </div>
+  )
+}

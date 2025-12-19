@@ -1,11 +1,44 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { ISPARTOF } from '@/data/constants';
+import HeroSection from '@/components/sections/HeroSection.astro';
+import ServiceCards from '@/components/sections/ServiceCards.astro';
+import BlogSection from '@/components/sections/BlogSection.astro';
+import AboutSection from '@/components/sections/AboutSection.astro';
+import CategoriesSection from '@/components/sections/CategoriesSection.astro';
+import PartnerSection from '@/components/sections/PartnerSection.astro';
+import ThirdPartySection from '@/components/sections/ThirdPartySection.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const title = 'KPHR | Expert Virtual Assistant & HR Support Solutions';
+const description =
+  'Helping small business owners build compliant, people-first teams with bilingual, practical HR guidance across California labor law, hiring, termination, and ongoing compliance.';
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<MainLayout
+  title={title}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://www.kphr.com',
+    url: 'https://www.kphr.com',
+    name: title,
+    description: description,
+    isPartOf: ISPARTOF,
+    inLanguage: 'en-US',
+  }}
+  meta={description}
+>
+  <section>
+    <HeroSection />
+    <ServiceCards />
+    <section id="blog">
+      <BlogSection />
+    </section>
+    <section id="about">
+      <AboutSection />
+    </section>
+    <CategoriesSection />
+    <PartnerSection />
+    <ThirdPartySection />
+  </section>
+</MainLayout>
