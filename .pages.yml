@@ -12,19 +12,7 @@ content:
     type: collection
     path: src/data/blogs
     format: yaml-frontmatter
-    filename: '{primary}/index.mdx' # saves each post in a folder with index.mdx
-    subfolders: true
-    view:
-      fields: [title, date, author, tags]
-      primary: title
-      sort: [date, title]
-      default:
-        sort: date
-        order: desc
-      layout: tree
-      node:
-        filename: index.mdx
-        hideDirs: others
+    filename: index.mdx # saves each post in a folder with index.mdx
     fields:
       - name: title
         label: Title
