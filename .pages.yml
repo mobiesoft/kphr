@@ -3,8 +3,6 @@ media:
     label: Blog Media
     input: src/data/blogs
     output: src/data/blogs
-    categories: [image]
-    extensions: [svg, png, jpg, jpeg, webp]
 
 content:
   - name: blogs
@@ -31,11 +29,11 @@ content:
         type: text
         required: true
       - name: image
-        label: Cover Image
-        type: image
+        label: Image Filepath
+        type: string
+        default: src/data/blogs/blog-post-title/filename.jpg
+        type: string
         required: true
-        options:
-          media: blog_images
       - name: tags
         label: Tags
         type: string
