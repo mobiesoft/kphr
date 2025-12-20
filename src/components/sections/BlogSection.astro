@@ -1,32 +1,25 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
 import Button from '@/components/ui/Button.astro';
 import Card from '@/components/ui/Card.astro';
 import CardContent from '@/components/ui/CardContent.astro';
 
-const blogPosts = [
-  {
-    title: "Managing Employee Leave: Employers' Key Responsibilities",
-    author: 'John Doe',
-    date: 'April 24, 2024',
-    excerpt: 'We help you set up HR without hiring full-time.',
-    image: 'bg-gradient-card',
-  },
-  {
-    title: 'Top 3 HR Mistakes Small Businesses Should Avoid',
-    author: 'John Doe',
-    date: 'April 24, 2024',
-    excerpt: 'Leamptiantling by aligning with CA labor law.',
-    image: 'bg-gradient-card',
-  },
-  {
-    title: 'Exempt v. Non-Exempt Employees: Understand the Difference',
-    author: 'John Doe',
-    date: 'April 24, 2024',
-    excerpt:
-      'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    image: 'bg-gradient-card',
-  },
-];
+const latestBlogs: CollectionEntry<'blogs'>[] = (await getCollection('blogs'))
+  .sort(
+    (a: CollectionEntry<'blogs'>, b: CollectionEntry<'blogs'>) =>
+      b.data.date.valueOf() - a.data.date.valueOf()
+  )
+  .slice(0, 3);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 ---
 
 <section class="bg-muted/30 w-full px-6 py-16">
@@ -44,17 +37,25 @@ const blogPosts = [
 
     <div class="mb-12 grid gap-8 md:grid-cols-3">
       {
-        blogPosts.map((post, index) => (
+        latestBlogs.map((entry) => (
           <Card class="shadow-card space-y-4 overflow-hidden border-0">
-            <div class={`h-48 ${post.image}`} />
+            {entry.data.image ? (
+              <Image
+                src={entry.data.image}
+                alt={entry.data.title}
+                class="h-48 w-full object-cover"
+              />
+            ) : (
+              <div class="bg-muted h-48" />
+            )}
             <CardContent class="p-6">
               <h3 class="text-foreground mb-3 text-xl leading-tight font-semibold">
-                {post.title}
+                {entry.data.title}
               </h3>
               <div class="text-muted-foreground mb-3 text-sm">
-                {post.date} • {post.author}
+                {formatDate(entry.data.date)} • {entry.data.author}
               </div>
-              <p class="text-muted-foreground">{post.excerpt}</p>
+              <p class="text-muted-foreground">{entry.data.excerpt}</p>
             </CardContent>
           </Card>
         ))
