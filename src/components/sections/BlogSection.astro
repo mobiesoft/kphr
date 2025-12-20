@@ -38,7 +38,10 @@ const formatDate = (d: Date) =>
     <div class="mb-12 grid gap-8 md:grid-cols-3">
       {
         latestBlogs.map((entry) => (
-          <Card class="shadow-card space-y-4 overflow-hidden border-0">
+          <Card
+            href={`/blogs/${entry.id}`}
+            class="shadow-card space-y-4 overflow-hidden border-0"
+          >
             {entry.data.image ? (
               <Image
                 src={entry.data.image}
@@ -64,6 +67,7 @@ const formatDate = (d: Date) =>
 
     <div class="text-center">
       <Button
+        href="/blogs"
         variant="default"
         size="lg"
         class="bg-gradient-primary text-primary-foreground shadow-button"

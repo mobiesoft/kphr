@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import MainLayout from '@/layouts/MainLayout.astro';
+import Prose from '@/components/typography/Prose.astro';
+import { SITE, ISPARTOF } from '@/data/constants';
+import { countWords } from '@/utils/countWords';
+
+interface Props {
+  data: any;
+  collection: string;
+  entry: any;
+  body: string | undefined;
+}
+
+const { data, collection, entry, body } = Astro.props;
+const title: string = `${data.title} | ${SITE.title}`;
+const description: string = data.excerpt;
+
+const wordCount = countWords(body || '');
+const readTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
+---
+
+<MainLayout
+  title={title}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `https://www.kphr.com/${collection}/${entry.id}`,
+    url: `https://www.kphr.com/${collection}/${entry.id}`,
+    name: title,
+    description: description,
+    isPartOf: ISPARTOF,
+    inLanguage: 'en-US',
+  }}
+  meta={description}
+>
+  <section class="mx-auto max-w-5xl px-6 py-16">
+    <h1
+      class="text-foreground font-headfont mb-4 text-center text-3xl font-bold md:text-5xl"
+    >
+      {data.title}
+    </h1>
+
+    <p class="text-muted-foreground mb-10 text-center text-sm">
+      {
+        data.pubDate
+          ? new Date(data.pubDate).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          : ''
+      }
+      &nbsp; • &nbsp;
+      {readTime} min read
+    </p>
+
+    <div class="mx-auto flex max-w-prose flex-col gap-5">
+      <figure
+        class="shadow-card border-border mx-auto overflow-hidden rounded-xl border"
+      >
+        <Image
+          width={700}
+          height={600}
+          src={data.image}
+          alt={`Cover image for ${data.title}`}
+          class="h-auto w-full object-cover"
+        />
+      </figure>
+      <Prose>
+        <slot />
+      </Prose>
+    </div>
+  </section>
+</MainLayout>

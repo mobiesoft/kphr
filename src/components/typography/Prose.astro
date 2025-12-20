@@ -1,0 +1,29 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'prose dark:prose-invert max-w-none',
+    'prose-headings:font-headfont prose-headings:font-bold prose-headings:tracking-tight',
+    'prose-headings:text-foreground',
+    'prose-p:leading-relaxed prose-p:text-muted-foreground',
+    'prose-a:text-primary prose-a:no-underline prose-a:underline-offset-4 hover:prose-a:underline',
+    'prose-strong:font-semibold prose-strong:text-primary',
+    'prose-em:font-medium prose-em:text-foreground',
+    'prose-code:rounded-md prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-primary prose-code:before:content-none prose-code:after:content-none',
+    'prose-pre:rounded-xl prose-pre:border prose-pre:border-border prose-pre:bg-muted',
+    'prose-li:text-muted-foreground prose-li:marker:text-primary',
+    'prose-ol:pl-5 prose-ul:pl-5',
+    'prose-img:rounded-xl prose-img:border prose-img:border-border',
+    'prose-blockquote:bg-accent/30 prose-blockquote:rounded-r-lg prose-blockquote:border-l-4 prose-blockquote:border-l-primary prose-blockquote:py-0.5 prose-blockquote:pl-4 prose-blockquote:not-italic',
+    'prose-hr:border-border',
+    className,
+  ]}
+>
+  <slot />
+</div>

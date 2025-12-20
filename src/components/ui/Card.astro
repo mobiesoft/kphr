@@ -2,9 +2,10 @@
 interface Props {
   class?: string;
   [key: string]: any;
+  href?: string;
 }
 
-const { class: className, ...attrs } = Astro.props as Props;
+const { class: className, href, ...attrs } = Astro.props as Props;
 
 function cn(...vals: Array<string | false | null | undefined>) {
   return vals.filter(Boolean).join(' ');
@@ -14,6 +15,14 @@ const base = 'rounded-lg border bg-card text-card-foreground shadow-sm';
 const classes = cn(base, className);
 ---
 
-<div class={classes} {...attrs}>
-  <slot />
-</div>
+{
+  href ? (
+    <a href={href} class={classes} {...attrs}>
+      <slot />
+    </a>
+  ) : (
+    <div class={classes} {...attrs}>
+      <slot />
+    </div>
+  )
+}

@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import MarkdownBlogLayout from '@/layouts/MarkdownBlogLayout.astro';
+
+export async function getStaticPaths() {
+  const blogs: CollectionEntry<'blogs'>[] = (await getCollection('blogs')).sort(
+    (a: CollectionEntry<'blogs'>, b: CollectionEntry<'blogs'>) =>
+      b.data.date.valueOf() - a.data.date.valueOf()
+  );
+
+  return blogs.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const collection = entry.collection;
+const data: any = entry.data;
+const { Content } = await render(entry);
+---
+
+<MarkdownBlogLayout
+  data={data}
+  collection={collection}
+  entry={entry}
+  body={entry.body}
+>
+  <Content />
+</MarkdownBlogLayout>
