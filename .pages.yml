@@ -31,7 +31,7 @@ content:
       - name: image
         label: Image Filepath
         type: string
-        default: src/data/blogs/{replace-with-blog-post-title}/images/{image-filename.ext}
+        default: ./images/{replace-with-the-real-image-filename.ext}
         type: string
         required: true
       - name: tags
