@@ -67,6 +67,16 @@ const readTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
           class="h-auto w-full object-cover"
         />
       </figure>
+      {
+        data.embedHtml && (
+          <div class="mx-auto w-full">
+            <div
+              set:html={data.embedHtml}
+              class="border-border shadow-card w-full rounded-xl border"
+            />
+          </div>
+        )
+      }
       <Prose>
         <slot />
       </Prose>

@@ -40,10 +40,14 @@ content:
         list: true
       - name: body
         label: Body
-        type: rich-text
+        type: code
+        options:
+          language: html
       - name: embedHtml
         label: Embed HTML (trusted)
-        type: text
+        type: code
+        options:
+          language: html
         required: false
 
 settings:
