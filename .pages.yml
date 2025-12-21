@@ -41,6 +41,10 @@ content:
       - name: body
         label: Body
         type: rich-text
+      - name: embedHtml
+        label: Embed HTML (trusted)
+        type: text
+        required: false
 
 settings:
   content:
