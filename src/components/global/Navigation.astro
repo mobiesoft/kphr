@@ -1,4 +1,5 @@
 ---
+import { X, Menu } from '@lucide/astro';
 import { Image } from 'astro:assets';
 import Button from '@/components/ui/Button.astro';
 import mainLogo from '@/images/main-logo.png';
@@ -9,6 +10,20 @@ import mainLogo from '@/images/main-logo.png';
     <a href="/" class="flex items-center">
       <Image src={mainLogo} alt="KPHR Logo" width={200} class="h-10 w-auto" />
     </a>
+
+    <!-- Mobile hamburger -->
+    <div class="md:hidden">
+      <button
+        id="menu-button"
+        class="text-foreground hover:text-primary focus:ring-primary inline-flex items-center justify-center rounded-md p-2 focus:ring-2 focus:outline-none"
+        aria-label="Toggle navigation"
+        aria-controls="mobile-nav"
+        aria-expanded="false"
+      >
+        <Menu data-open-icon class="h-6 w-6" />
+        <X data-close-icon class="data-close-icon hidden h-6 w-6" />
+      </button>
+    </div>
 
     <div class="hidden items-center space-x-8 md:flex">
       <a href="/" class="text-foreground hover:text-primary transition-colors">
@@ -21,7 +36,7 @@ import mainLogo from '@/images/main-logo.png';
         About
       </a>
       <a
-        href="#blog"
+        href="/blogs"
         class="text-foreground hover:text-primary transition-colors"
       >
         Blog
@@ -40,4 +55,72 @@ import mainLogo from '@/images/main-logo.png';
       </Button>
     </div>
   </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-nav" class="hidden md:hidden">
+    <div class="border-border mt-4 space-y-2 border-t pt-4">
+      <a
+        href="/"
+        class="text-foreground hover:text-primary block transition-colors"
+        >Home</a
+      >
+      <a
+        href="#about"
+        class="text-foreground hover:text-primary block transition-colors"
+        >About</a
+      >
+      <a
+        href="/blogs"
+        class="text-foreground hover:text-primary block transition-colors"
+        >Blog</a
+      >
+      <a
+        href="#contact"
+        class="text-foreground hover:text-primary block transition-colors"
+        >Contact</a
+      >
+      <div class="pt-2">
+        <Button
+          href="/request-va"
+          class="bg-gradient-primary text-primary-foreground shadow-button w-full hover:opacity-90"
+        >
+          Request VA
+        </Button>
+      </div>
+    </div>
+  </div>
 </nav>
+
+<script>
+  const btn = document.getElementById('menu-button');
+  const menu = document.getElementById('mobile-nav');
+  const openIcon = btn?.querySelector('[data-open-icon]');
+  const closeIcon = btn?.querySelector('[data-close-icon]');
+
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', (!expanded).toString());
+      menu.classList.toggle('hidden', expanded);
+      openIcon?.classList.toggle('hidden', !expanded);
+      closeIcon?.classList.toggle('hidden', expanded);
+    });
+
+    // Close the menu when a link is clicked
+    menu.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => {
+        btn.setAttribute('aria-expanded', 'false');
+        menu.classList.add('hidden');
+        openIcon?.classList.remove('hidden');
+        closeIcon?.classList.add('hidden');
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        btn.click();
+      }
+    });
+  }
+</script>
