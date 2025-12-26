@@ -7,8 +7,10 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import Card from '@/components/ui/Card.astro';
 import CardContent from '@/components/ui/CardContent.astro';
 
-const blogs: CollectionEntry<'blogs'>[] = (await getCollection('blogs')).sort(
-  (a: CollectionEntry<'blogs'>, b: CollectionEntry<'blogs'>) =>
+const articles: CollectionEntry<'articles'>[] = (
+  await getCollection('articles')
+).sort(
+  (a: CollectionEntry<'articles'>, b: CollectionEntry<'articles'>) =>
     b.data.date.valueOf() - a.data.date.valueOf()
 );
 
@@ -35,9 +37,9 @@ const formatDate = (d: Date) =>
 
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {
-          blogs.map((entry) => (
+          articles.map((entry) => (
             <Card
-              href={`/blogs/${entry.id}`}
+              href={`/articles/${entry.id}`}
               class="shadow-card space-y-4 overflow-hidden border-0"
             >
               {entry.data.image ? (

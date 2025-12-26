@@ -1,14 +1,19 @@
 media:
-  - name: blog_images
-    label: Blog Media
-    input: src/data/blogs
-    output: src/data/blogs
+  - name: articles_images
+    label: Articles Media
+    input: src/data/articles
+    output: src/data/articles
+
+  - name: resources_images
+    label: Resources Media
+    input: src/data/resources
+    output: src/data/resources
 
 content:
-  - name: blogs
-    label: Blogs
+  - name: articles
+    label: Articles
     type: collection
-    path: src/data/blogs
+    path: src/data/articles
     format: yaml-frontmatter
     filename: index.mdx # saves each post in a folder with index.mdx
     fields:
