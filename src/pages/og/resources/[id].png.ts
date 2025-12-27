@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(__dirname, '../../../../');
+const resourceRoot = path.resolve(__dirname, '../../../../');
 
 async function getImageAsBase64(
   imagePath: string,
@@ -29,12 +29,12 @@ async function resolveEntryImagePath(
   filePath: string,
   imageSrc?: string,
 ): Promise<string | undefined> {
-  const fullFilePath = path.join(projectRoot, filePath);
+  const fullFilePath = path.join(resourceRoot, filePath);
   const dir = path.dirname(fullFilePath);
 
   if (imageSrc) {
     const candidate = imageSrc.startsWith('/')
-      ? path.join(projectRoot, imageSrc.replace(/^\//, ''))
+      ? path.join(resourceRoot, imageSrc.replace(/^\//, ''))
       : path.resolve(dir, imageSrc);
     try {
       await fs.access(candidate);
