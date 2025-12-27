@@ -16,6 +16,8 @@ async function getImageAsBase64(
 
     const imageBuffer = await fs.readFile(imagePath);
     const ext = path.extname(imagePath).toLowerCase().slice(1);
+    const rasterExts = new Set(['png', 'jpg', 'jpeg', 'webp']);
+    if (!rasterExts.has(ext)) return undefined;
     const mimeType = ext === 'jpg' ? 'jpeg' : ext;
     return `data:image/${mimeType};base64,${imageBuffer.toString('base64')}`;
   } catch (error) {
@@ -45,6 +47,8 @@ async function resolveEntryImagePath(
   const fallbacks = [
     path.join(dir, 'images', 'main.png'),
     path.join(dir, 'main.png'),
+    path.join(dir, 'images', 'placeholder.svg'),
+    path.join(dir, 'placeholder.svg'),
   ];
   for (const p of fallbacks) {
     try {
