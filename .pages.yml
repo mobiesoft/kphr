@@ -24,6 +24,10 @@ content:
       - name: author
         label: Author
         type: string
+      - name: isFeatured
+        label: Featured Article
+        type: boolean
+        default: false
         required: true
       - name: date
         label: Date
@@ -48,6 +52,60 @@ content:
         type: code
         options:
           language: html
+
+  # Resources Collection
+  - name: resources
+    label: Resources
+    type: collection
+    path: src/data/resources
+    format: yaml-frontmatter
+    filename: index.mdx # saves each post in a folder with index.mdx
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: provider
+        label: Provider
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+      - name: category
+        label: Category
+        type: string
+        required: true
+      - name: priceRange
+        label: Price Range
+        type: string
+        required: true
+      - name: rating
+        label: Rating
+        type: number
+        required: false
+      - name: isFeatured
+        label: Featured Resources
+        type: boolean
+        default: false
+        required: true
+      - name: image
+        label: Image Filepath
+        type: string
+        default: ./images/{replace-with-the-real-image-filename.ext}
+        type: string
+        required: true
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: body
+        label: Body
+        type: code
+        options:
+          language: html
+
 
 settings:
   content:

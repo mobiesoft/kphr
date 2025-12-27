@@ -26,7 +26,12 @@ const pageTitle = (title ?? '')
 <!doctype html>
 <html lang="en">
   <head>
-    <Meta title={pageTitle} meta={meta} structuredData={structuredData} />
+    <Meta
+      title={pageTitle}
+      meta={meta}
+      structuredData={structuredData}
+      preloadImage={preloadImage}
+    />
     <title>{pageTitle}</title>
   </head>
   <body>

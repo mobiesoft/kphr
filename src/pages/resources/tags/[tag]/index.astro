@@ -1,0 +1,134 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+import MainLayout from '@/layouts/MainLayout.astro';
+import Card from '@/components/ui/Card.astro';
+import CardContent from '@/components/ui/CardContent.astro';
+
+export async function getStaticPaths() {
+  const entries: CollectionEntry<'resources'>[] =
+    await getCollection('resources');
+  const tagMap = new Map<string, string>(); // slug -> display
+
+  const toSlug = (s: string) =>
+    s
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/&/g, 'and')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+  for (const e of entries) {
+    const t: unknown = (e as any).data?.tags ?? (e as any).data?.tag ?? [];
+    const arr: string[] = Array.isArray(t)
+      ? t.map((x) => String(x))
+      : t
+        ? [String(t as any)]
+        : [];
+    for (const tag of arr) {
+      const slug = toSlug(tag);
+      if (!tagMap.has(slug)) tagMap.set(slug, tag);
+    }
+  }
+
+  return Array.from(tagMap.entries()).map(([slug, display]) => ({
+    params: { tag: slug },
+    props: { tagDisplay: display },
+  }));
+}
+
+const { tag } = Astro.params;
+const { tagDisplay } = Astro.props as { tagDisplay?: string };
+
+const all: CollectionEntry<'resources'>[] = await getCollection('resources');
+
+const resources = all.filter((entry) => {
+  const t: unknown =
+    (entry as any).data?.tags ?? (entry as any).data?.tag ?? [];
+  const arr: string[] = Array.isArray(t)
+    ? t.map((x) => String(x))
+    : t
+      ? [String(t as any)]
+      : [];
+  const toSlug = (s: string) =>
+    s
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/&/g, 'and')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  return arr.some((x) => toSlug(x) === tag);
+});
+---
+
+<MainLayout title={`Resources tagged "${tagDisplay ?? tag}"`}>
+  <section class="bg-muted/30 w-full px-6 py-16">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-12 text-center">
+        <h1 class="text-foreground mb-4 text-3xl font-bold md:text-5xl">
+          {
+            resources.length
+              ? `Resources tagged “${tagDisplay ?? tag}”`
+              : `No resources for “${tagDisplay ?? tag}”`
+          }
+        </h1>
+        {
+          resources.length ? (
+            <p class="text-muted-foreground mx-auto max-w-3xl text-xl">
+              {resources.length} {resources.length === 1 ? 'item' : 'items'}{' '}
+              found.
+            </p>
+          ) : (
+            <p class="text-muted-foreground mx-auto max-w-3xl text-xl">
+              Try a different tag or browse featured resources.
+            </p>
+          )
+        }
+      </div>
+
+      {
+        resources.length ? (
+          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {resources.map((entry) => (
+              <Card
+                href={`/resources/${entry.id}`}
+                class="shadow-card space-y-4 overflow-hidden border-0"
+              >
+                {entry.data.image ? (
+                  <Image
+                    src={entry.data.image}
+                    alt={entry.data.title}
+                    class="h-48 w-full object-cover"
+                  />
+                ) : (
+                  <div class="bg-muted h-48" />
+                )}
+                <CardContent class="p-6">
+                  <h3 class="text-foreground mb-2 text-xl leading-tight font-semibold">
+                    {entry.data.title}
+                  </h3>
+                  <div class="text-muted-foreground mb-2 text-sm">
+                    {entry.data.provider} • {entry.data.category}
+                  </div>
+                  <p class="text-muted-foreground text-sm">
+                    {entry.data.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div class="text-center">
+            <a href="/" class="underline hover:no-underline">
+              Back to home
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</MainLayout>

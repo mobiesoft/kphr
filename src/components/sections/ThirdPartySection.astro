@@ -5,84 +5,28 @@ import CardContent from '@/components/ui/CardContent.astro';
 import CardHeader from '@/components/ui/CardHeader.astro';
 import CardTitle from '@/components/ui/CardTitle.astro';
 import Badge from '@/components/ui/Badge.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
-const services = [
-  {
-    title: 'Legal Advisory Services',
-    provider: 'Corporate Law Partners',
-    description:
-      'Expert employment law guidance for complex HR situations and compliance issues.',
-    category: 'Legal',
-    rating: '4.9/5',
-    priceRange: '$200-500/hr',
-    features: ['Employment Law', 'Contract Review', 'Compliance Audits'],
-  },
-  {
-    title: 'Payroll & Benefits Management',
-    provider: 'PayrollPro Solutions',
-    description:
-      'Comprehensive payroll processing and benefits administration for growing businesses.',
-    category: 'Payroll',
-    rating: '4.8/5',
-    priceRange: '$50-150/employee',
-    features: ['Automated Payroll', 'Benefits Admin', 'Tax Compliance'],
-  },
-  {
-    title: 'Recruitment & Staffing',
-    provider: 'TalentFinder Agency',
-    description:
-      'Professional recruitment services to help you find the right talent quickly.',
-    category: 'Recruitment',
-    rating: '4.7/5',
-    priceRange: '15-25% of salary',
-    features: ['Executive Search', 'Temp Staffing', 'Skills Assessment'],
-  },
-  {
-    title: 'Training & Development',
-    provider: 'SkillBoost Learning',
-    description:
-      "Custom training programs to enhance your team's skills and productivity.",
-    category: 'Training',
-    rating: '4.8/5',
-    priceRange: '$100-300/employee',
-    features: [
-      'Leadership Training',
-      'Compliance Training',
-      'Skills Development',
-    ],
-  },
-  {
-    title: 'HR Technology Solutions',
-    provider: 'HRTech Innovations',
-    description:
-      'Modern HRIS and employee management software tailored for small businesses.',
-    category: 'Technology',
-    rating: '4.6/5',
-    priceRange: '$10-50/employee/month',
-    features: ['HRIS Platform', 'Time Tracking', 'Performance Management'],
-  },
-  {
-    title: 'Workplace Wellness Programs',
-    provider: 'Wellness at Work',
-    description:
-      'Comprehensive employee wellness programs to boost morale and productivity.',
-    category: 'Wellness',
-    rating: '4.9/5',
-    priceRange: '$25-75/employee/month',
-    features: [
-      'Mental Health Support',
-      'Fitness Programs',
-      'Stress Management',
-    ],
-  },
-];
+const resources: CollectionEntry<'resources'>[] = (
+  await getCollection('resources')
+).filter((entry) => entry.data.isFeatured === true);
+
+const toSlug = (s: string) =>
+  s
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 ---
 
 <section class="bg-muted/30 w-full px-6 py-16">
   <div class="mx-auto max-w-7xl">
     <div class="mb-12 text-center">
       <h2 class="text-foreground mb-4 text-3xl font-bold md:text-5xl">
-        Partner Services
+        Partner services
       </h2>
       <p class="text-muted-foreground mx-auto max-w-3xl text-xl">
         Trusted third-party providers to complement your HR needs. These vetted
@@ -92,7 +36,7 @@ const services = [
 
     <div class="mb-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
       {
-        services.map((service, index) => (
+        resources.map((resource, index) => (
           <Card
             key={index}
             class="shadow-card border-0 transition-shadow hover:shadow-lg"
@@ -100,25 +44,32 @@ const services = [
             <CardHeader>
               <div class="mb-2 flex items-start justify-between">
                 <Badge variant="secondary" class="mb-2">
-                  {service.category}
+                  {resource.data.category}
                 </Badge>
                 <div class="text-muted-foreground text-sm">
-                  ⭐ {service.rating}
+                  ⭐{' '}
+                  {resource.data.rating ? `${resource.data.rating}/5` : 'N/A'}
                 </div>
               </div>
               <CardTitle class="text-foreground text-xl leading-tight">
-                {service.title}
+                {resource.data.title}
               </CardTitle>
               <p class="text-primary text-sm font-medium">
-                by {service.provider}
+                by {resource.data.provider}
               </p>
             </CardHeader>
             <CardContent class="space-y-4">
-              <p class="text-muted-foreground">{service.description}</p>
+              <p class="text-muted-foreground">{resource.data.description}</p>
 
               <div class="flex flex-wrap gap-2">
-                {service.features.map((feature, featureIndex) => (
-                  <Badge key={featureIndex} variant="outline" class="text-xs">
+                {(resource.data.tags || []).map((feature, featureIndex) => (
+                  <Badge
+                    key={featureIndex}
+                    as="a"
+                    href={`/resources/tags/${toSlug(feature)}`}
+                    variant="outline"
+                    class="text-xs"
+                  >
                     {feature}
                   </Badge>
                 ))}
@@ -128,12 +79,13 @@ const services = [
                 <div class="text-sm">
                   <span class="text-muted-foreground">From </span>
                   <span class="text-foreground font-semibold">
-                    {service.priceRange}
+                    {resource.data.priceRange}
                   </span>
                 </div>
               </div>
 
               <Button
+                href={`/resources/${resource.id}`}
                 variant="outline"
                 class="hover:bg-primary hover:text-primary-foreground w-full"
               >
@@ -151,8 +103,8 @@ const services = [
           Want to be Featured?
         </h3>
         <p class="text-muted-foreground mx-auto mb-6 max-w-2xl">
-          Are you a service provider looking to reach SMBs in need of HR
-          support? Join our partner network and showcase your services to our
+          Are you a resource provider looking to reach SMBs in need of HR
+          support? Join our partner network and showcase your resources to our
           growing community.
         </p>
         <div class="flex flex-col justify-center gap-4 sm:flex-row">

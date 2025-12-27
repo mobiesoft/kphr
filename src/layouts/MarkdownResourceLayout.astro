@@ -2,8 +2,8 @@
 import { Image, getImage } from 'astro:assets';
 import MainLayout from '@/layouts/MainLayout.astro';
 import Prose from '@/components/typography/Prose.astro';
+import Badge from '@/components/ui/Badge.astro';
 import { SITE, ISPARTOF } from '@/data/constants';
-import { countWords } from '@/utils/countWords';
 
 interface Props {
   data: any;
@@ -12,18 +12,15 @@ interface Props {
   body: string | undefined;
 }
 
-const { data, collection, entry, body } = Astro.props;
+const { data, collection, entry } = Astro.props as Props;
 const title: string = `${data.title} | ${SITE.title}`;
-const description: string = data.excerpt;
+const description: string = data.description;
 const socialImageRes = await getImage({
   src: data.image,
   width: 1200,
   height: 630,
   format: 'png',
 });
-
-const wordCount = countWords(body || '');
-const readTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
 ---
 
 <MainLayout
@@ -43,24 +40,35 @@ const readTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
 >
   <section class="mx-auto max-w-5xl px-6 py-16">
     <h1
-      class="text-foreground font-headfont mb-4 text-center text-3xl font-bold md:text-5xl"
+      class="text-foreground font-headfont mb-2 text-center text-3xl font-bold md:text-5xl"
     >
       {data.title}
     </h1>
 
-    <p class="text-muted-foreground mb-10 text-center text-sm">
+    <p class="text-muted-foreground mb-6 text-center text-sm">
+      {data.provider}
+      {data.category ? <>&nbsp; • &nbsp;{data.category}</> : ''}
+      {data.priceRange ? <>&nbsp; • &nbsp;{data.priceRange}</> : ''}
       {
-        data.pubDate
-          ? new Date(data.pubDate).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })
-          : ''
+        typeof data.rating === 'number' ? (
+          <>&nbsp; • &nbsp;Rating: {data.rating}/5</>
+        ) : (
+          ''
+        )
       }
-      &nbsp; • &nbsp;
-      {readTime} min read
     </p>
+
+    {
+      Array.isArray(data.tags) && data.tags.length > 0 ? (
+        <div class="mb-8 flex flex-wrap justify-center gap-2">
+          {data.tags.map((tag: string) => (
+            <Badge>{tag}</Badge>
+          ))}
+        </div>
+      ) : (
+        ''
+      )
+    }
 
     <div class="mx-auto flex max-w-prose flex-col gap-5">
       <figure

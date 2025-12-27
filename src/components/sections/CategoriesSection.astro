@@ -12,6 +12,7 @@ const categories = ['Recruitment', 'Employee Relations', 'HR Strategy'];
       {
         categories.map((category) => (
           <Button
+            href={`/articles/tags/${category.toLowerCase().replace(/\s+/g, '-')}`}
             variant="outline"
             size="lg"
             class="hover:bg-primary hover:text-primary-foreground !rounded-full border-2 transition-colors"

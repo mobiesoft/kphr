@@ -11,11 +11,27 @@ const blogCollection = defineCollection({
       date: z.date(),
       excerpt: z.string(),
       image: image(),
-      embedHtml: z.string().optional(),
+      tags: z.array(z.string()).optional(),
+    }),
+});
+
+const resourcesCollection = defineCollection({
+  loader: glob({ pattern: '**/index.mdx', base: './src/data/resources' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      provider: z.string(),
+      description: z.string(),
+      category: z.string(),
+      priceRange: z.string(),
+      rating: z.number().min(0).max(5).optional(),
+      isFeatured: z.boolean().optional().default(false),
+      image: image(),
       tags: z.array(z.string()).optional(),
     }),
 });
 
 export const collections = {
   articles: blogCollection,
+  resources: resourcesCollection,
 };
