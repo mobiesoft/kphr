@@ -10,7 +10,7 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://www.kphr.com/',
+  site: 'https://kphr.pages.dev/',
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
