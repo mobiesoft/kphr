@@ -4,19 +4,20 @@ import Meta from '@/components/global/Meta.astro';
 import Navigation from '@/components/global/Navigation.astro';
 import Footer from '@/components/global/Footer.astro';
 
+interface OGData {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
 interface Props {
   title: string;
   meta?: string;
   structuredData?: object;
-  preloadImage?: {
-    src: string;
-    srcset?: string;
-    sizes?: string;
-    type?: string;
-  };
+  ogData?: OGData;
 }
 
-const { title, meta, structuredData, preloadImage } = Astro.props as Props;
+const { title, meta, structuredData, ogData } = Astro.props as Props;
 const pageTitle = (title ?? '')
   .replace(/<[^>]*>/g, ' ')
   .replace(/\s+/g, ' ')
@@ -30,7 +31,7 @@ const pageTitle = (title ?? '')
       title={pageTitle}
       meta={meta}
       structuredData={structuredData}
-      preloadImage={preloadImage}
+      ogData={ogData}
     />
     <title>{pageTitle}</title>
   </head>

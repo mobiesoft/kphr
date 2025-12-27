@@ -2,6 +2,20 @@
 import { getImage } from 'astro:assets';
 import { OG, SEO, SITE } from '@/data/constants';
 
+interface OGData {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+interface Props {
+  title: string;
+  meta?: string;
+  structuredData?: object;
+  liturgy?: boolean;
+  ogData?: OGData;
+}
+
 const defaultProps = {
   meta: SITE.description,
   structuredData: SEO.structuredData,
@@ -11,13 +25,8 @@ const {
   title,
   meta = defaultProps.meta,
   structuredData = defaultProps.structuredData,
-  preloadImage,
-} = Astro.props as {
-  title?: string;
-  meta?: string;
-  structuredData?: object;
-  preloadImage?: { src: string } | undefined;
-};
+  ogData,
+} = Astro.props;
 
 const URL = `${Astro.site}`; // Set the website URL in astro.config.mjs
 const author = SITE.author;
@@ -27,37 +36,18 @@ const domain = Astro.url.host;
 const pageTitle = title || OG.title;
 const pageDescription = meta || OG.description;
 
-// Default to site-wide OG image
-const defaultSocialImageRes = await getImage({
-  src: OG.image,
-  width: 1200,
-  height: 600,
-});
-
-let socialImage = Astro.url.origin + defaultSocialImageRes.src;
-
-// Prefer content collection image if provided by layout
-if (preloadImage?.src) {
-  socialImage = Astro.url.origin + preloadImage.src;
+// Use custom OG image if provided, otherwise fall back to default
+let socialImage: string;
+if (ogData?.image) {
+  socialImage = Astro.url.origin + ogData.image;
+} else {
+  const socialImageRes = await getImage({
+    src: OG.image,
+    width: 1200,
+    height: 600,
+  });
+  socialImage = Astro.url.origin + socialImageRes.src;
 }
-// If content image is SVG, route to PNG-converted endpoint for better OG compatibility
-const pathname = Astro.url.pathname.replace(/\/$/, '');
-if (preloadImage?.src?.endsWith('.svg')) {
-  if (pathname.startsWith('/articles/') && !pathname.includes('/tags/')) {
-    const id = pathname.replace(/^\/articles\//, '');
-    socialImage = Astro.url.origin + `/og/articles/content/${id}.png`;
-  } else if (
-    pathname.startsWith('/resources/') &&
-    !pathname.includes('/tags/')
-  ) {
-    const id = pathname.replace(/^\/resources\//, '');
-    socialImage = Astro.url.origin + `/og/resources/content/${id}.png`;
-  }
-}
-const ogType = Astro.url.pathname.startsWith('/articles/')
-  ? 'article'
-  : 'website';
-const imageType = preloadImage?.src?.endsWith('.png') ? 'image/png' : undefined;
 ---
 
 {
@@ -84,14 +74,14 @@ const imageType = preloadImage?.src?.endsWith('.png') ? 'image/png' : undefined;
 <!-- Facebook Meta Tags -->
 <meta property="og:locale" content="en_US" />
 <meta property="og:url" content={canonical} />
-<meta property="og:type" content={ogType} />
+<meta property="og:type" content="website" />
 <meta property="og:title" content={pageTitle} />
 <meta property="og:site_name" content={SITE.title} />
 <meta property="og:description" content={pageDescription} />
 <meta property="og:image" content={socialImage} />
 <meta content="1200" property="og:image:width" />
 <meta content="630" property="og:image:height" />
-{imageType ? <meta content={imageType} property="og:image:type" /> : ''}
+<meta content="image/png" property="og:image:type" />
 
 <!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image" />

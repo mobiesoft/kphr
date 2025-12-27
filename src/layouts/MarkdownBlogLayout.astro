@@ -15,15 +15,12 @@ interface Props {
 const { data, collection, entry, body } = Astro.props;
 const title: string = `${data.title} | ${SITE.title}`;
 const description: string = data.excerpt;
-const socialImageRes = await getImage({
-  src: data.image,
-  width: 1200,
-  height: 630,
-  format: 'png',
-});
 
 const wordCount = countWords(body || '');
 const readTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
+
+// Generate dynamic OG image path
+const ogImagePath = `/og/${collection}/${entry.id}.png`;
 ---
 
 <MainLayout
@@ -39,7 +36,11 @@ const readTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
     inLanguage: 'en-US',
   }}
   meta={description}
-  preloadImage={{ src: socialImageRes.src }}
+  ogData={{
+    title: `${data.title} | ${SITE.title}`,
+    description: description,
+    image: ogImagePath,
+  }}
 >
   <section class="mx-auto max-w-5xl px-6 py-16">
     <h1

@@ -15,12 +15,9 @@ interface Props {
 const { data, collection, entry } = Astro.props as Props;
 const title: string = `${data.title} | ${SITE.title}`;
 const description: string = data.description;
-const socialImageRes = await getImage({
-  src: data.image,
-  width: 1200,
-  height: 630,
-  format: 'png',
-});
+
+// Generate dynamic OG image path
+const ogImagePath = `/og/${collection}/${entry.id}.png`;
 ---
 
 <MainLayout
@@ -36,7 +33,11 @@ const socialImageRes = await getImage({
     inLanguage: 'en-US',
   }}
   meta={description}
-  preloadImage={{ src: socialImageRes.src }}
+  ogData={{
+    title: `${data.title} | ${SITE.title}`,
+    description: description,
+    image: ogImagePath,
+  }}
 >
   <section class="mx-auto max-w-5xl px-6 py-16">
     <h1
