@@ -1,0 +1,80 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { ISPARTOF } from '@/data/constants';
+import { Image } from 'astro:assets';
+import Button from '@/components/ui/Button.astro';
+import Card from '@/components/ui/Card.astro';
+import CardContent from '@/components/ui/CardContent.astro';
+import hrImage from '@/images/hr-personel.png';
+
+const title = 'KPHR | About Us';
+const description =
+  'Learn more about KPHR, our mission, values, and commitment to providing exceptional HR solutions for small businesses in California.';
+---
+
+<MainLayout
+  title={title}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://www.kphr.com/about',
+    url: 'https://www.kphr.com/about',
+    name: title,
+    description: description,
+    isPartOf: ISPARTOF,
+    inLanguage: 'en-US',
+  }}
+  meta={description}
+>
+  <section class="bg-muted/30 w-full px-6 py-16">
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-16 grid items-center gap-12 md:grid-cols-2">
+        <div>
+          <Image
+            src={hrImage}
+            alt="Aileen - HR Professional"
+            class="shadow-card w-full max-w-md rounded-lg"
+            loading="lazy"
+          />
+        </div>
+        <div>
+          <h2 class="text-foreground mb-6 text-3xl font-bold md:text-4xl">
+            Hi, I'm Aileen
+          </h2>
+          <p class="text-muted-foreground mb-6 text-lg leading-relaxed">
+            With over 10 years of HR experience across California startups and
+            international businesses, I help small business owners build
+            compliant, people-first teams—without the stress.
+          </p>
+          <p class="text-primary text-lg font-medium italic">
+            Bilingual. Practical. People-centered.
+          </p>
+        </div>
+      </div>
+
+      <Card
+        class="bg-gradient-primary text-primary-foreground shadow-card border-0 p-8"
+      >
+        <CardContent
+          class="flex flex-col items-center justify-between gap-6 !p-0 md:flex-row"
+        >
+          <div class="flex items-center gap-4">
+            <div class="text-4xl">🧩</div>
+            <div>
+              <h3 class="mb-2 text-xl font-bold md:text-2xl">
+                Want a free HR checklist for small business owners?
+              </h3>
+            </div>
+          </div>
+          <Button
+            variant="secondary"
+            size="lg"
+            class="text-primary flex bg-white font-semibold hover:bg-white/90"
+          >
+            Download Free HR Toolkit
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  </section>
+</MainLayout>

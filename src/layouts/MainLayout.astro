@@ -3,6 +3,7 @@ import '@/styles/global.css';
 import Meta from '@/components/global/Meta.astro';
 import Navigation from '@/components/global/Navigation.astro';
 import Footer from '@/components/global/Footer.astro';
+import SenderNet from '@/components/global/SenderNet.astro';
 
 interface OGData {
   title?: string;
@@ -34,6 +35,7 @@ const pageTitle = (title ?? '')
       ogData={ogData}
     />
     <title>{pageTitle}</title>
+    <SenderNet />
   </head>
   <body>
     <main>

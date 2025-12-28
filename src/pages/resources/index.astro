@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+import MainLayout from '@/layouts/MainLayout.astro';
+import { ISPARTOF } from '@/data/constants';
+import Button from '@/components/ui/Button.astro';
+import Card from '@/components/ui/Card.astro';
+import CardContent from '@/components/ui/CardContent.astro';
+import CardHeader from '@/components/ui/CardHeader.astro';
+import CardTitle from '@/components/ui/CardTitle.astro';
+import Badge from '@/components/ui/Badge.astro';
+
+const resources: CollectionEntry<'resources'>[] = (
+  await getCollection('resources')
+).filter((entry) => entry.data.isFeatured === true);
+
+const toSlug = (s: string) =>
+  s
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const title = 'KPHR | Partner Services';
+const description =
+  'Explore KPHR’s trusted third-party partner services, offering specialized HR solutions to support your small business needs.';
+---
+
+<MainLayout
+  title={title}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://www.kphr.com/contact',
+    url: 'https://www.kphr.com/contact',
+    name: title,
+    description: description,
+    isPartOf: ISPARTOF,
+    inLanguage: 'en-US',
+  }}
+  meta={description}
+>
+  <section class="bg-muted/30 w-full px-6 py-16">
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-12 text-center">
+        <h2 class="text-foreground mb-4 text-3xl font-bold md:text-5xl">
+          Partner services
+        </h2>
+        <p class="text-muted-foreground mx-auto max-w-3xl text-xl">
+          Trusted third-party providers to complement your HR needs. These
+          vetted partners offer specialized services to support your business
+          growth.
+        </p>
+      </div>
+
+      <div class="mb-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {
+          resources.map((resource, index) => (
+            <Card
+              key={index}
+              class="shadow-card border-0 transition-shadow hover:shadow-lg"
+            >
+              <CardHeader>
+                <div class="mb-2 flex items-start justify-between">
+                  <Badge variant="secondary" class="mb-2">
+                    {resource.data.category}
+                  </Badge>
+                  <div class="text-muted-foreground text-sm">
+                    ⭐{' '}
+                    {resource.data.rating ? `${resource.data.rating}/5` : 'N/A'}
+                  </div>
+                </div>
+                <CardTitle class="text-foreground text-xl leading-tight">
+                  {resource.data.title}
+                </CardTitle>
+                <p class="text-primary text-sm font-medium">
+                  by {resource.data.provider}
+                </p>
+              </CardHeader>
+              <CardContent class="space-y-4">
+                <p class="text-muted-foreground">{resource.data.description}</p>
+
+                <div class="flex flex-wrap gap-2">
+                  {(resource.data.tags || []).map((feature, featureIndex) => (
+                    <Badge
+                      key={featureIndex}
+                      as="a"
+                      href={`/resources/tags/${toSlug(feature)}`}
+                      variant="outline"
+                      class="text-xs"
+                    >
+                      {feature}
+                    </Badge>
+                  ))}
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                  <div class="text-sm">
+                    <span class="text-muted-foreground">From </span>
+                    <span class="text-foreground font-semibold">
+                      {resource.data.priceRange}
+                    </span>
+                  </div>
+                </div>
+
+                <Button
+                  href={`/resources/${resource.id}`}
+                  variant="outline"
+                  class="hover:bg-primary hover:text-primary-foreground w-full"
+                >
+                  Learn More
+                </Button>
+              </CardContent>
+            </Card>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</MainLayout>

@@ -3,6 +3,16 @@ import { X, Menu } from '@lucide/astro';
 import { Image } from 'astro:assets';
 import Button from '@/components/ui/Button.astro';
 import mainLogo from '@/images/main-logo.png';
+
+// Shared navigation items
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Articles', href: '/articles' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const ctaItem = { label: 'Request VA', href: '/request-va' };
 ---
 
 <nav class="bg-background border-border w-full border-b px-6 py-4">
@@ -26,65 +36,46 @@ import mainLogo from '@/images/main-logo.png';
     </div>
 
     <div class="hidden items-center space-x-8 md:flex">
-      <a href="/" class="text-foreground hover:text-primary transition-colors">
-        Home
-      </a>
-      <a
-        href="#about"
-        class="text-foreground hover:text-primary transition-colors"
-      >
-        About
-      </a>
-      <a
-        href="/articles"
-        class="text-foreground hover:text-primary transition-colors"
-      >
-        Articles
-      </a>
-      <a
-        href="/contact"
-        class="text-foreground hover:text-primary transition-colors"
-      >
-        Contact
-      </a>
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class="text-foreground hover:text-primary transition-colors"
+          >
+            {item.label}
+          </a>
+        ))
+      }
       <Button
-        href="/request-va"
+        href={ctaItem.href}
         class="bg-gradient-primary text-primary-foreground shadow-button hover:opacity-90"
       >
-        Request VA
+        {ctaItem.label}
       </Button>
     </div>
   </div>
 
   <!-- Mobile menu -->
   <div id="mobile-nav" class="hidden md:hidden">
-    <div class="border-border mt-4 space-y-2 border-t pt-4">
-      <a
-        href="/"
-        class="text-foreground hover:text-primary block transition-colors"
-        >Home</a
-      >
-      <a
-        href="#about"
-        class="text-foreground hover:text-primary block transition-colors"
-        >About</a
-      >
-      <a
-        href="/blogs"
-        class="text-foreground hover:text-primary block transition-colors"
-        >Blog</a
-      >
-      <a
-        href="/contact"
-        class="text-foreground hover:text-primary block transition-colors"
-        >Contact</a
-      >
-      <div class="pt-2">
+    <div
+      class="border-border bg-card/60 mt-4 space-y-1 rounded-xl border p-2 shadow-lg backdrop-blur-sm"
+    >
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class="text-foreground hover:text-primary hover:bg-muted/40 focus:ring-primary block rounded-md px-3 py-2 transition-colors focus:ring-2 focus:outline-none"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <div class="border-border mt-2 border-t pt-3">
         <Button
-          href="/request-va"
+          href={ctaItem.href}
           class="bg-gradient-primary text-primary-foreground shadow-button w-full hover:opacity-90"
         >
-          Request VA
+          {ctaItem.label}
         </Button>
       </div>
     </div>

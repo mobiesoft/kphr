@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { ISPARTOF } from '@/data/constants';
 
 import MainLayout from '@/layouts/MainLayout.astro';
 import Card from '@/components/ui/Card.astro';
@@ -20,9 +21,26 @@ const formatDate = (d: Date) =>
     month: 'long',
     day: 'numeric',
   });
+
+const title = 'KPHR | Articles';
+const description =
+  'Explore KPHR articles for practical HR insights, tips, and strategies tailored for small businesses.';
 ---
 
-<MainLayout title="HR Matters Blog">
+<MainLayout
+  title={title}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://www.kphr.com/contact',
+    url: 'https://www.kphr.com/contact',
+    name: title,
+    description: description,
+    isPartOf: ISPARTOF,
+    inLanguage: 'en-US',
+  }}
+  meta={description}
+>
   <section class="bg-muted/30 w-full px-6 py-16">
     <div class="mx-auto max-w-6xl">
       <div class="mb-12 text-center">
