@@ -1,0 +1,74 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { ISPARTOF } from '@/data/constants';
+import Button from '@/components/ui/Button.astro';
+import IframeContainer from '@/components/ui/IframeContainer.astro';
+import { Lock } from '@lucide/astro';
+
+const title = 'Virtual Assistants for HR Support | KPHR';
+const description =
+  'Discover KPHR virtual assistants offering expert HR support for small businesses. From compliance to employee relations, our VAs are here to help.';
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': 'https://kphr.com/virtual-assistants',
+  url: 'https://kphr.com/virtual-assistants',
+  name: title,
+  description: description,
+  isPartOf: ISPARTOF,
+  inLanguage: 'en-US',
+};
+---
+
+<MainLayout title={title} structuredData={structuredData} meta={description}>
+  <section class="w-full px-6 py-16">
+    <div class="mx-auto max-w-5xl">
+      <header class="mb-8">
+        <h1
+          class="font-headfont text-foreground text-3xl font-bold tracking-tight sm:text-4xl"
+        >
+          Virtual Assistants for HR Support
+        </h1>
+        <p class="text-muted-foreground mt-3 max-w-3xl text-base">
+          VAs coordinate onboarding/offboarding, maintain compliance tasks,
+          manage communications, and support day-to-day HR operations across
+          your team.
+        </p>
+        <div class="mt-6">
+          <Button as="a" href="#form" size="lg">Get Started</Button>
+        </div>
+      </header>
+
+      <section id="form" aria-labelledby="form-heading" class="scroll-mt-24">
+        <h2 id="form-heading" class="sr-only">Get started form</h2>
+        <div
+          class="border-border bg-card overflow-hidden rounded-xl border p-3 shadow-sm md:p-6 md:shadow"
+        >
+          <div
+            class="text-muted-foreground mb-2 flex items-center gap-2 text-xs"
+          >
+            <Lock class="text-primary" />
+            <span>Secure form</span>
+          </div>
+          <IframeContainer>
+            <iframe
+              title="Get started — Virtual Assistant HR support"
+              src="https://forms.fillout.com/t/25mc3peyLNus"
+              loading="lazy"
+              allow="clipboard-write; microphone; camera; geolocation"
+              referrerpolicy="no-referrer-when-downgrade"
+              class="w-full"
+              style="border:0; height: clamp(600px, 80vh, 900px)"></iframe>
+          </IframeContainer>
+        </div>
+        <p class="text-muted-foreground mt-3 text-center text-sm">
+          Prefer email? Reach us at
+          <a class="underline underline-offset-4" href="mailto:hello@kphr.com"
+            >hello@kphr.com</a
+          >.
+        </p>
+      </section>
+    </div>
+  </section>
+</MainLayout>

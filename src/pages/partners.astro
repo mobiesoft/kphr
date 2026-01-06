@@ -1,0 +1,71 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { ISPARTOF } from '@/data/constants';
+import IframeContainer from '@/components/ui/IframeContainer.astro';
+import { Lock } from '@lucide/astro';
+
+const title = 'KPHR | Partner Services';
+const description =
+  'Explore KPHR’s trusted partner services, offering specialized solutions to enhance your HR capabilities.';
+---
+
+<MainLayout
+  title={title}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://kphr.com/partners',
+    url: 'https://kphr.com/partners',
+    name: title,
+    description: description,
+    isPartOf: ISPARTOF,
+    inLanguage: 'en-US',
+  }}
+  meta={description}
+>
+  <section class="w-full px-6 py-16">
+    <div class="mx-auto max-w-5xl">
+      <header class="mb-8">
+        <h1
+          class="font-headfont text-foreground text-3xl font-bold tracking-tight sm:text-4xl"
+        >
+          Partner Services
+        </h1>
+        <p class="text-muted-foreground mt-3 max-w-3xl text-base">
+          Discover KPHR’s trusted partner services, providing specialized HR
+          solutions to support your small business needs.
+        </p>
+      </header>
+
+      <section id="form" aria-labelledby="form-heading" class="scroll-mt-24">
+        <h2 id="form-heading" class="sr-only">Get started form</h2>
+        <div
+          class="border-border bg-card overflow-hidden rounded-xl border p-3 shadow-sm md:p-6 md:shadow"
+        >
+          <div
+            class="text-muted-foreground mb-2 flex items-center gap-2 text-xs"
+          >
+            <Lock class="text-primary" />
+            <span>Secure form</span>
+          </div>
+          <IframeContainer>
+            <iframe
+              title="Get started — Virtual Assistant HR support"
+              src="https://forms.fillout.com/t/25mc3peyLNus"
+              loading="lazy"
+              allow="clipboard-write; microphone; camera; geolocation"
+              referrerpolicy="no-referrer-when-downgrade"
+              class="w-full"
+              style="border:0; height: clamp(600px, 80vh, 900px)"></iframe>
+          </IframeContainer>
+        </div>
+        <p class="text-muted-foreground mt-3 text-center text-sm">
+          Prefer email? Reach us at
+          <a class="underline underline-offset-4" href="mailto:hello@kphr.com"
+            >hello@kphr.com</a
+          >.
+        </p>
+      </section>
+    </div>
+  </section>
+</MainLayout>

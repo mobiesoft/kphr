@@ -2,7 +2,7 @@
 
 Marketing site for KPHR, built with Astro and Tailwind CSS. It showcases services, credibility, and resources for small business owners.
 
-- Live site: https://kphr.pages.dev/
+- Live site: https://kphr.com/
 - Framework: Astro
 - Styling: Tailwind CSS v4 with custom CSS variables
 - Icons: Lucide

@@ -31,7 +31,27 @@ const resourcesCollection = defineCollection({
     }),
 });
 
+const privacyPolicyCollection = defineCollection({
+  loader: glob({ pattern: 'privacy.mdx', base: './src/data' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    lastUpdated: z.string(),
+  }),
+});
+
+const accessibleCollections = defineCollection({
+  loader: glob({ pattern: 'accessibility.mdx', base: './src/data' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    lastUpdated: z.string().optional(),
+  }),
+});
+
 export const collections = {
   articles: blogCollection,
   resources: resourcesCollection,
+  policies: privacyPolicyCollection,
+  accessible: accessibleCollections,
 };

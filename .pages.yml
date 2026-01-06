@@ -106,6 +106,53 @@ content:
         options:
           language: html
 
+  # Privacy Policy Collection
+  - name: policies
+    label: Privacy Policies
+    type: collection
+    path: src/data
+    format: yaml-frontmatter
+    filename: privacy.mdx
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+      - name: lastUpdated
+        label: Last Updated
+        type: string
+        required: true
+      - name: body
+        label: Body
+        type: rich-text
+
+  # Accessibility Statement Collection
+  - name: accessible
+    label: ADA Statements
+    type: collection
+    path: src/data
+    format: yaml-frontmatter
+    filename: accessibility.mdx
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+      - name: lastUpdated
+        label: Last Updated
+        type: string
+        required: true
+      - name: body
+        label: Body
+        type: rich-text
 
 settings:
   content:

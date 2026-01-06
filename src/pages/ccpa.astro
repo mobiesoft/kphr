@@ -1,0 +1,42 @@
+---
+import { getEntry, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { ISPARTOF } from '@/data/constants';
+import Prose from '@/components/typography/Prose.astro';
+
+const entry = await getEntry('policies', 'privacy');
+
+if (!entry) {
+  return Astro.redirect('/404');
+}
+
+const typedEntry: CollectionEntry<'policies'> = entry;
+const { Content } = await render(typedEntry);
+
+const title = typedEntry.data.title;
+const description = typedEntry.data.description;
+---
+
+<MainLayout
+  title={title}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://kphr.com/ccpa',
+    url: 'https://kphr.com/ccpa',
+    name: title,
+    description: description,
+    isPartOf: ISPARTOF,
+    inLanguage: 'en-US',
+  }}
+  meta={description}
+>
+  <section class="mx-auto max-w-5xl px-6 py-16">
+    <div class="mx-auto max-w-6xl">
+      <Prose>
+        <Content />
+      </Prose>
+    </div>
+  </section>
+</MainLayout>

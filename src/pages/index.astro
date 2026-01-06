@@ -19,8 +19,8 @@ const description =
   structuredData={{
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    '@id': 'https://kphr.pages.dev',
-    url: 'https://kphr.pages.dev',
+    '@id': 'https://kphr.com',
+    url: 'https://kphr.com',
     name: title,
     description: description,
     isPartOf: ISPARTOF,
@@ -28,15 +28,11 @@ const description =
   }}
   meta={description}
 >
-  <section>
-    <HeroSection />
-    <ServiceCards />
-    <BlogSection />
-    <section id="about">
-      <AboutSection />
-    </section>
-    <CategoriesSection />
-    <PartnerSection />
-    <ThirdPartySection />
-  </section>
+  <HeroSection />
+  <ServiceCards />
+  <BlogSection />
+  <AboutSection />
+  <CategoriesSection />
+  <PartnerSection />
+  <ThirdPartySection />
 </MainLayout>
