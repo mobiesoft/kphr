@@ -110,7 +110,7 @@ content:
   - name: policies
     label: Privacy Policies
     type: collection
-    path: src/data
+    path: src/data/privacy
     format: yaml-frontmatter
     filename: privacy.mdx
     fields:
@@ -134,7 +134,7 @@ content:
   - name: accessible
     label: ADA Statements
     type: collection
-    path: src/data
+    path: src/data/accessibility
     format: yaml-frontmatter
     filename: accessibility.mdx
     fields:

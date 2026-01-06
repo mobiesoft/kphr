@@ -32,7 +32,7 @@ const resourcesCollection = defineCollection({
 });
 
 const privacyPolicyCollection = defineCollection({
-  loader: glob({ pattern: 'privacy.mdx', base: './src/data' }),
+  loader: glob({ pattern: 'privacy.mdx', base: './src/data/privacy' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -41,7 +41,10 @@ const privacyPolicyCollection = defineCollection({
 });
 
 const accessibleCollections = defineCollection({
-  loader: glob({ pattern: 'accessibility.mdx', base: './src/data' }),
+  loader: glob({
+    pattern: 'accessibility.mdx',
+    base: './src/data/accessibility',
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
