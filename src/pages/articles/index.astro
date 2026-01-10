@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { ISPARTOF } from '@/data/constants';
+import turncate from '@/utils/turncate';
 
 import MainLayout from '@/layouts/MainLayout.astro';
 import Card from '@/components/ui/Card.astro';
@@ -32,8 +33,8 @@ const description =
   structuredData={{
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    '@id': 'https://kphr.com/contact',
-    url: 'https://kphr.com/contact',
+    '@id': 'https://kphr.com/articles',
+    url: 'https://kphr.com/articles',
     name: title,
     description: description,
     isPartOf: ISPARTOF,
@@ -76,7 +77,9 @@ const description =
                 <div class="text-muted-foreground mb-3 text-sm">
                   {formatDate(entry.data.date)} • {entry.data.author}
                 </div>
-                <p class="text-muted-foreground">{entry.data.excerpt}</p>
+                <p class="text-muted-foreground">
+                  {turncate(entry.data.excerpt, 18)}
+                </p>
               </CardContent>
             </Card>
           ))
