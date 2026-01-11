@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { ISPARTOF } from '@/data/constants';
 import turncate from '@/utils/turncate';
+import { extractYouTubeId, getYouTubeThumbnail } from '@/utils/youtube';
 
 import MainLayout from '@/layouts/MainLayout.astro';
 import Card from '@/components/ui/Card.astro';
@@ -61,15 +62,12 @@ const description =
               href={`/articles/${entry.id}`}
               class="shadow-card space-y-4 overflow-hidden border-0"
             >
-              {entry.data.image ? (
-                <Image
-                  src={entry.data.image}
-                  alt={entry.data.title}
-                  class="h-48 w-full object-cover"
-                />
-              ) : (
-                <div class="bg-muted h-48" />
-              )}
+              <Image
+                src={entry.data.image}
+                alt={entry.data.title}
+                class="h-48 w-full object-cover"
+              />
+
               <CardContent class="p-6">
                 <h3 class="text-foreground mb-3 text-xl leading-tight font-semibold">
                   {entry.data.title}

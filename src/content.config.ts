@@ -12,6 +12,11 @@ const blogCollection = defineCollection({
       excerpt: z.string(),
       image: image(),
       tags: z.array(z.string()).optional(),
+      // YouTube Video fields (optional)
+      youtubeUrl: z.string().url().optional(),
+      hasVideoSchema: z.boolean().optional().default(false),
+      videoTitle: z.string().optional(),
+      videoDescription: z.string().optional(),
     }),
 });
 

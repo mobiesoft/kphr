@@ -1,0 +1,80 @@
+---
+/**
+ * VideoSchema - Generates VideoObject JSON-LD structured data
+ *
+ * This creates a SEPARATE VideoObject schema (not hybrid/combined)
+ * to be used alongside the Article schema on the same page.
+ *
+ * Google recommends separate schemas for Article + VideoObject
+ * rather than combining them.
+ */
+import {
+  extractYouTubeId,
+  getYouTubeThumbnail,
+  getYouTubeEmbedUrl,
+  getYouTubeWatchUrl,
+} from '@/utils/youtube';
+
+interface Props {
+  youtubeUrl: string;
+  title: string;
+  description: string;
+  uploadDate: Date;
+  duration?: string; // ISO 8601 duration format (e.g., "PT5M30S" for 5min 30sec)
+  thumbnailOverride?: string;
+}
+
+const {
+  youtubeUrl,
+  title,
+  description,
+  uploadDate,
+  duration,
+  thumbnailOverride,
+} = Astro.props;
+
+const videoId = extractYouTubeId(youtubeUrl);
+
+if (!videoId) {
+  // Don't render anything if no valid video ID
+  return;
+}
+
+// Format date as ISO 8601
+const isoDate = uploadDate.toISOString();
+
+// Use override thumbnail or generate from YouTube
+const thumbnailUrl =
+  thumbnailOverride || getYouTubeThumbnail(videoId, 'maxres');
+
+// Build VideoObject schema
+const videoSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: title,
+  description: description,
+  thumbnailUrl: [
+    getYouTubeThumbnail(videoId, 'maxres'),
+    getYouTubeThumbnail(videoId, 'sd'),
+    getYouTubeThumbnail(videoId, 'hq'),
+  ],
+  uploadDate: isoDate,
+  ...(duration && { duration }), // ISO 8601 format: PT5M30S
+  url: getYouTubeWatchUrl(videoId),
+  contentUrl: getYouTubeWatchUrl(videoId),
+  embedUrl: getYouTubeEmbedUrl(videoId),
+  // KPHR is the publisher for the video
+  publisher: {
+    '@type': 'Organization',
+    name: 'KPHR',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://kphr.com/kphr-logo.png',
+      width: 996,
+      height: 252,
+    },
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(videoSchema)} />

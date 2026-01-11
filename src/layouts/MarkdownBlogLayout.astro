@@ -2,8 +2,11 @@
 import { Image, getImage } from 'astro:assets';
 import MainLayout from '@/layouts/MainLayout.astro';
 import Prose from '@/components/typography/Prose.astro';
+import YouTubeEmbed from '@/components/video/YouTubeEmbed.astro';
+import VideoSchema from '@/components/video/VideoSchema.astro';
 import { SITE, ISPARTOF } from '@/data/constants';
 import { countWords } from '@/utils/countWords';
+import { extractYouTubeId, getYouTubeThumbnail } from '@/utils/youtube';
 
 interface Props {
   data: any;
@@ -21,20 +24,94 @@ const readTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
 
 // Generate dynamic OG image path
 const ogImagePath = `/og/${collection}/${entry.id}.png`;
+
+// YouTube video handling
+const videoId = data.youtubeUrl ? extractYouTubeId(data.youtubeUrl) : null;
+const hasYouTubeVideo = !!videoId;
+const shouldShowVideoSchema = hasYouTubeVideo && data.hasVideoSchema;
+const videoTitle = data.videoTitle || data.title;
+const videoDescription = data.videoDescription || data.excerpt;
+const videoThumbnailUrl = videoId
+  ? getYouTubeThumbnail(videoId, 'maxres')
+  : null;
+
+// Breadcrumb data - dynamic based on route
+const collectionName = collection.charAt(0).toUpperCase() + collection.slice(1); // "articles" → "Articles"
+
+// Build breadcrumb items dynamically
+type BreadcrumbItem = {
+  name: string;
+  href: string;
+  isCurrentPage?: boolean;
+};
+
+const breadcrumbItems: BreadcrumbItem[] = [
+  { name: 'Home', href: '/' },
+  { name: collectionName, href: `/${collection}` },
+  { name: data.title, href: `/${collection}/${entry.id}`, isCurrentPage: true },
+];
+
+// BreadcrumbList structured data
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbItems.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.name,
+    item: `https://kphr.com${item.href}`,
+  })),
+};
+
+// Article structured data (more specific than WebPage for blog posts)
+const articleStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  '@id': `https://kphr.com/${collection}/${entry.id}`,
+  url: `https://kphr.com/${collection}/${entry.id}`,
+  headline: data.title,
+  description: description,
+  image: `https://kphr.com${ogImagePath}`,
+  datePublished: data.date.toISOString(),
+  dateModified: data.date.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: data.author || SITE.author,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'KPHR',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://kphr.com/kphr-logo.png',
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `https://kphr.com/${collection}/${entry.id}`,
+  },
+  isPartOf: ISPARTOF,
+  inLanguage: 'en-US',
+  // Reference the video if present (VideoObject schema is separate)
+  ...(shouldShowVideoSchema &&
+    videoId && {
+      video: {
+        '@type': 'VideoObject',
+        '@id': `https://www.youtube.com/watch?v=${videoId}`,
+        name: videoTitle,
+        description: videoDescription,
+        thumbnailUrl: videoThumbnailUrl,
+        uploadDate: data.date.toISOString(),
+        contentUrl: `https://www.youtube.com/watch?v=${videoId}`,
+        embedUrl: `https://www.youtube.com/embed/${videoId}`,
+      },
+    }),
+};
 ---
 
 <MainLayout
   title={title}
-  structuredData={{
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    '@id': `https://kphr.com/${collection}/${entry.id}`,
-    url: `https://kphr.com/${collection}/${entry.id}`,
-    name: title,
-    description: description,
-    isPartOf: ISPARTOF,
-    inLanguage: 'en-US',
-  }}
+  structuredData={articleStructuredData}
   meta={description}
   ogData={{
     title: `${data.title} | ${SITE.title}`,
@@ -43,6 +120,40 @@ const ogImagePath = `/og/${collection}/${entry.id}.png`;
   }}
 >
   <section class="mx-auto max-w-5xl px-6 py-16">
+    {/* Visual Breadcrumb Navigation */}
+    <nav aria-label="Breadcrumb" class="mb-8">
+      <ol
+        class="text-muted-foreground flex flex-wrap items-center gap-1 text-sm"
+      >
+        {
+          breadcrumbItems.map((item, index) => (
+            <>
+              {index > 0 && <li class="text-muted-foreground/50">›</li>}
+              <li
+                class={
+                  item.isCurrentPage
+                    ? 'text-foreground max-w-[200px] truncate font-medium md:max-w-none'
+                    : ''
+                }
+                aria-current={item.isCurrentPage ? 'page' : undefined}
+              >
+                {item.isCurrentPage ? (
+                  item.name
+                ) : (
+                  <a
+                    href={item.href}
+                    class="hover:text-foreground transition-colors"
+                  >
+                    {item.name}
+                  </a>
+                )}
+              </li>
+            </>
+          ))
+        }
+      </ol>
+    </nav>
+
     <h1
       class="text-foreground font-headfont mb-4 text-center text-3xl font-bold md:text-5xl"
     >
@@ -64,20 +175,46 @@ const ogImagePath = `/og/${collection}/${entry.id}.png`;
     </p>
 
     <div class="mx-auto flex max-w-prose flex-col gap-5">
+      {/* Hero: YouTube embed if video present, otherwise image */}
       <figure
-        class="shadow-card border-border mx-auto overflow-hidden rounded-xl border"
+        class="shadow-card border-border mx-auto w-full overflow-hidden rounded-xl border"
       >
-        <Image
-          width={700}
-          height={600}
-          src={data.image}
-          alt={`Cover image for ${data.title}`}
-          class="h-auto w-full object-cover"
-        />
+        {
+          hasYouTubeVideo ? (
+            <YouTubeEmbed url={data.youtubeUrl} title={videoTitle} />
+          ) : (
+            <Image
+              width={700}
+              height={600}
+              src={data.image}
+              alt={`Cover image for ${data.title}`}
+              class="h-auto w-full object-cover"
+            />
+          )
+        }
       </figure>
+
       <Prose>
         <slot />
       </Prose>
     </div>
   </section>
+
+  {/* VideoObject Schema - separate from Article schema */}
+  {
+    shouldShowVideoSchema && (
+      <VideoSchema
+        youtubeUrl={data.youtubeUrl}
+        title={videoTitle}
+        description={videoDescription}
+        uploadDate={data.date}
+      />
+    )
+  }
+
+  {/* BreadcrumbList Schema */}
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(breadcrumbSchema)}
+  />
 </MainLayout>

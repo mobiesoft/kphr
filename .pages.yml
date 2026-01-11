@@ -47,6 +47,27 @@ content:
         label: Tags
         type: string
         list: true
+      - name: youtubeUrl
+        label: YouTube Video URL
+        type: string
+        required: false
+        description: "Paste the full YouTube URL (e.g., https://www.youtube.com/watch?v=xxxxx)"
+      - name: hasVideoSchema
+        label: Add Video to Google Search
+        type: boolean
+        default: false
+        required: false
+        description: "Check this if the video should appear in Google Video search results"
+      - name: videoTitle
+        label: Video Title (Optional)
+        type: string
+        required: false
+        description: "Leave blank to use article title"
+      - name: videoDescription
+        label: Video Description (Optional)
+        type: text
+        required: false
+        description: "Leave blank to use article excerpt"
       - name: body
         label: Body
         type: code

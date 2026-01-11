@@ -1,12 +1,12 @@
 import ogImageSrc from '@/images/main-logo.png';
 
 export const SITE = {
-  title: 'Aileen HR — Practical, Bilingual HR for SMBs',
+  title: 'KPHR',
   tagline: 'Empowering small businesses with practical, bilingual HR support.',
   description:
     'Helping small business owners build compliant, people-first teams with bilingual, practical HR guidance across California labor law, hiring, termination, and ongoing compliance.',
   description_short: 'Bilingual, people-centered HR for small businesses.',
-  url: 'https://example.com',
+  url: 'https://kphr.com',
   author: 'Aileen',
 };
 
