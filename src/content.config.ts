@@ -57,9 +57,28 @@ const accessibleCollections = defineCollection({
   }),
 });
 
+const aboutCollection = defineCollection({
+  loader: glob({ pattern: 'about.mdx', base: './src/data/about' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      pageTitle: z.string(),
+      description: z.string(),
+      heading: z.string(),
+      intro: z.string(),
+      tagline: z.string(),
+      image: image(),
+      imageAlt: z.string(),
+      ctaHeading: z.string(),
+      ctaButtonText: z.string(),
+      ctaButtonLink: z.string().optional(),
+    }),
+});
+
 export const collections = {
   articles: blogCollection,
   resources: resourcesCollection,
   policies: privacyPolicyCollection,
   accessible: accessibleCollections,
+  about: aboutCollection,
 };

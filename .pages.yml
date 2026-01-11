@@ -9,6 +9,11 @@ media:
     input: src/data/resources
     output: src/data/resources
 
+  - name: about_images
+    label: About Media
+    input: src/data/about/images
+    output: src/data/about/images
+
 content:
   - name: articles
     label: Articles
@@ -174,6 +179,59 @@ content:
       - name: body
         label: Body
         type: rich-text
+
+  # About Page Collection
+  - name: about
+    label: About Page
+    type: file
+    path: src/data/about/about.mdx
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Page Title (SEO)
+        type: string
+        required: true
+      - name: pageTitle
+        label: Page Title (Display)
+        type: string
+        required: true
+      - name: description
+        label: Meta Description
+        type: text
+        required: true
+      - name: heading
+        label: Main Heading
+        type: string
+        required: true
+      - name: intro
+        label: Introduction Text
+        type: text
+        required: true
+      - name: tagline
+        label: Tagline
+        type: string
+        required: true
+      - name: image
+        label: Profile Image
+        type: string
+        default: ./images/hr-personel.png
+        required: true
+      - name: imageAlt
+        label: Image Alt Text
+        type: string
+        required: true
+      - name: ctaHeading
+        label: CTA Heading
+        type: string
+        required: true
+      - name: ctaButtonText
+        label: CTA Button Text
+        type: string
+        required: true
+      - name: ctaButtonLink
+        label: CTA Button Link
+        type: string
+        required: false
 
 settings:
   content:
