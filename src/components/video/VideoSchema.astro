@@ -51,6 +51,7 @@ const thumbnailUrl =
 const videoSchema = {
   '@context': 'https://schema.org',
   '@type': 'VideoObject',
+  '@id': getYouTubeWatchUrl(videoId),
   name: title,
   description: description,
   thumbnailUrl: [
@@ -70,8 +71,8 @@ const videoSchema = {
     logo: {
       '@type': 'ImageObject',
       url: 'https://kphr.com/kphr-logo.png',
-      width: 996,
-      height: 252,
+      width: 600,
+      height: 60,
     },
   },
 };

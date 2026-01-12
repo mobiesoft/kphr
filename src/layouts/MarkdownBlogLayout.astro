@@ -55,6 +55,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
+  '@id': `https://kphr.com/${collection}/${entry.id}#breadcrumb`,
   itemListElement: breadcrumbItems.map((item, index) => ({
     '@type': 'ListItem',
     position: index + 1,
@@ -71,7 +72,12 @@ const articleStructuredData = {
   url: `https://kphr.com/${collection}/${entry.id}`,
   headline: data.title,
   description: description,
-  image: `https://kphr.com${ogImagePath}`,
+  image: {
+    '@type': 'ImageObject',
+    url: `https://kphr.com${ogImagePath}`,
+    width: 1200,
+    height: 630,
+  },
   datePublished: data.date.toISOString(),
   dateModified: data.date.toISOString(),
   author: {
@@ -84,6 +90,8 @@ const articleStructuredData = {
     logo: {
       '@type': 'ImageObject',
       url: 'https://kphr.com/kphr-logo.png',
+      width: 600,
+      height: 60,
     },
   },
   mainEntityOfPage: {
