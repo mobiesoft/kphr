@@ -4,6 +4,7 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import Prose from '@/components/typography/Prose.astro';
 import YouTubeEmbed from '@/components/video/YouTubeEmbed.astro';
 import VideoSchema from '@/components/video/VideoSchema.astro';
+import Accordion from '@/components/ui/Accordion.astro';
 import { SITE, ISPARTOF } from '@/data/constants';
 import { countWords } from '@/utils/countWords';
 import { extractYouTubeId, getYouTubeThumbnail } from '@/utils/youtube';
@@ -216,6 +217,15 @@ const articleStructuredData = {
       <Prose>
         <slot />
       </Prose>
+
+      {/* FAQ Accordion - displays if FAQs are provided */}
+      {
+        data.faqs && data.faqs.length > 0 && (
+          <div class="border-border mt-12 border-t pt-8">
+            <Accordion items={data.faqs} title="Frequently Asked Questions" />
+          </div>
+        )
+      }
     </div>
   </section>
 

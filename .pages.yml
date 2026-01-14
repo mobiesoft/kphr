@@ -105,6 +105,20 @@ content:
         list: true
         required: false
         description: "Region codes where video is allowed (e.g., US, CA, MX)"
+      - name: faqs
+        label: FAQs (Optional)
+        type: object
+        list: true
+        required: false
+        fields:
+          - name: question
+            label: Question
+            type: string
+            required: true
+          - name: answer
+            label: Answer
+            type: text
+            required: true
       - name: body
         label: Body
         type: code

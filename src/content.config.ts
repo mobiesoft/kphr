@@ -23,6 +23,15 @@ const blogCollection = defineCollection({
       videoDuration: z.string().optional(),
       videoViewCount: z.number().optional(),
       videoRegionsAllowed: z.array(z.string()).optional(),
+      // Q&A fields (optional)
+      faqs: z
+        .array(
+          z.object({
+            question: z.string(),
+            answer: z.string(),
+          }),
+        )
+        .optional(),
     }),
 });
 
