@@ -12,11 +12,17 @@ const blogCollection = defineCollection({
       excerpt: z.string(),
       image: image(),
       tags: z.array(z.string()).optional(),
+      articleSection: z.string().optional(),
+      keywords: z.array(z.string()).optional(),
       // YouTube Video fields (optional)
       youtubeUrl: z.string().url().optional(),
       hasVideoSchema: z.boolean().optional().default(false),
       videoTitle: z.string().optional(),
+      videoUploadDate: z.string().optional(),
       videoDescription: z.string().optional(),
+      videoDuration: z.string().optional(),
+      videoViewCount: z.number().optional(),
+      videoRegionsAllowed: z.array(z.string()).optional(),
     }),
 });
 

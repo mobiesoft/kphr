@@ -52,6 +52,17 @@ content:
         label: Tags
         type: string
         list: true
+      - name: articleSection
+        label: Article Section (Optional)
+        type: string
+        required: false
+        description: "e.g., California Labor Law, Hiring & Compliance"
+      - name: keywords
+        label: Keywords (Optional)
+        type: string
+        list: true
+        required: false
+        description: "SEO keywords and topics (e.g., SB 1162, pay transparency)"
       - name: youtubeUrl
         label: YouTube Video URL
         type: string
@@ -73,6 +84,27 @@ content:
         type: text
         required: false
         description: "Leave blank to use article excerpt"
+      - name: videoUploadDate
+        label: Video Upload Date (Optional)
+        type: date
+        required: false
+        description: "Set the actual YouTube video upload date. Leave blank to use article date"
+      - name: videoDuration
+        label: Video Duration (Optional)
+        type: string
+        required: false
+        description: "ISO 8601 format (e.g., PT5M30S for 5 minutes 30 seconds)"
+      - name: videoViewCount
+        label: Video View Count (Optional)
+        type: number
+        required: false
+        description: "Approximate view count for Google rich results"
+      - name: videoRegionsAllowed
+        label: Video Regions Allowed (Optional)
+        type: string
+        list: true
+        required: false
+        description: "Region codes where video is allowed (e.g., US, CA, MX)"
       - name: body
         label: Body
         type: code

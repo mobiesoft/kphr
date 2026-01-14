@@ -24,6 +24,7 @@ const readTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
 
 // Generate dynamic OG image path
 const ogImagePath = `/og/${collection}/${entry.id}.png`;
+const canonical = Astro.url.href;
 
 // YouTube video handling
 const videoId = data.youtubeUrl ? extractYouTubeId(data.youtubeUrl) : null;
@@ -47,15 +48,19 @@ type BreadcrumbItem = {
 
 const breadcrumbItems: BreadcrumbItem[] = [
   { name: 'Home', href: '/' },
-  { name: collectionName, href: `/${collection}` },
-  { name: data.title, href: `/${collection}/${entry.id}`, isCurrentPage: true },
+  { name: collectionName, href: `/${collection}/` },
+  {
+    name: data.title,
+    href: `/${collection}/${entry.id}/`,
+    isCurrentPage: true,
+  },
 ];
 
 // BreadcrumbList structured data
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
-  '@id': `https://kphr.com/${collection}/${entry.id}#breadcrumb`,
+  '@id': `${canonical}#breadcrumb`,
   itemListElement: breadcrumbItems.map((item, index) => ({
     '@type': 'ListItem',
     position: index + 1,
@@ -64,14 +69,26 @@ const breadcrumbSchema = {
   })),
 };
 
+// WebPage structured data (best practice: cleaner schema graph)
+const webPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': canonical,
+  breadcrumb: {
+    '@id': `${canonical}#breadcrumb`,
+  },
+};
+
 // Article structured data (more specific than WebPage for blog posts)
 const articleStructuredData = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  '@id': `https://kphr.com/${collection}/${entry.id}`,
-  url: `https://kphr.com/${collection}/${entry.id}`,
+  '@id': canonical,
+  url: canonical,
   headline: data.title,
   description: description,
+  ...(data.articleSection && { articleSection: data.articleSection }),
+  ...(data.keywords && { keywords: data.keywords }),
   image: {
     '@type': 'ImageObject',
     url: `https://kphr.com${ogImagePath}`,
@@ -95,23 +112,16 @@ const articleStructuredData = {
     },
   },
   mainEntityOfPage: {
-    '@type': 'WebPage',
-    '@id': `https://kphr.com/${collection}/${entry.id}`,
+    '@id': canonical,
   },
   isPartOf: ISPARTOF,
   inLanguage: 'en-US',
   // Reference the video if present (VideoObject schema is separate)
   ...(shouldShowVideoSchema &&
     videoId && {
-      video: {
+      hasPart: {
         '@type': 'VideoObject',
         '@id': `https://www.youtube.com/watch?v=${videoId}`,
-        name: videoTitle,
-        description: videoDescription,
-        thumbnailUrl: videoThumbnailUrl,
-        uploadDate: data.date.toISOString(),
-        contentUrl: `https://www.youtube.com/watch?v=${videoId}`,
-        embedUrl: `https://www.youtube.com/embed/${videoId}`,
       },
     }),
 };
@@ -126,6 +136,7 @@ const articleStructuredData = {
     description: description,
     image: ogImagePath,
   }}
+  type="article"
 >
   <section class="mx-auto max-w-5xl px-6 py-16">
     {/* Visual Breadcrumb Navigation */}
@@ -215,7 +226,10 @@ const articleStructuredData = {
         youtubeUrl={data.youtubeUrl}
         title={videoTitle}
         description={videoDescription}
-        uploadDate={data.date}
+        uploadDate={data.videoUploadDate || data.date}
+        duration={data.videoDuration}
+        viewCount={data.videoViewCount}
+        regionsAllowed={data.videoRegionsAllowed}
       />
     )
   }
@@ -225,4 +239,7 @@ const articleStructuredData = {
     type="application/ld+json"
     set:html={JSON.stringify(breadcrumbSchema)}
   />
+
+  {/* WebPage Schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
 </MainLayout>

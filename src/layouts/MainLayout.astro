@@ -16,9 +16,10 @@ interface Props {
   meta?: string;
   structuredData?: object;
   ogData?: OGData;
+  type?: string;
 }
 
-const { title, meta, structuredData, ogData } = Astro.props as Props;
+const { title, meta, structuredData, ogData, type } = Astro.props as Props;
 const pageTitle = (title ?? '')
   .replace(/<[^>]*>/g, ' ')
   .replace(/\s+/g, ' ')
@@ -33,6 +34,7 @@ const pageTitle = (title ?? '')
       meta={meta}
       structuredData={structuredData}
       ogData={ogData}
+      type={type}
     />
     <title>{pageTitle}</title>
     <SenderNet />

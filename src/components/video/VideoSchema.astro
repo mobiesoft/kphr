@@ -22,6 +22,8 @@ interface Props {
   uploadDate: Date;
   duration?: string; // ISO 8601 duration format (e.g., "PT5M30S" for 5min 30sec)
   thumbnailOverride?: string;
+  viewCount?: number; // For interactionStatistic
+  regionsAllowed?: string[]; // Array of region codes (e.g., ["US", "CA", "MX"])
 }
 
 const {
@@ -31,6 +33,8 @@ const {
   uploadDate,
   duration,
   thumbnailOverride,
+  viewCount,
+  regionsAllowed,
 } = Astro.props;
 
 const videoId = extractYouTubeId(youtubeUrl);
@@ -62,8 +66,17 @@ const videoSchema = {
   uploadDate: isoDate,
   ...(duration && { duration }), // ISO 8601 format: PT5M30S
   url: getYouTubeWatchUrl(videoId),
-  contentUrl: getYouTubeWatchUrl(videoId),
-  embedUrl: getYouTubeEmbedUrl(videoId),
+  embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
+  ...(viewCount && {
+    interactionStatistic: [
+      {
+        '@type': 'InteractionCounter',
+        interactionType: 'https://schema.org/WatchAction',
+        userInteractionCount: viewCount.toString(),
+      },
+    ],
+  }),
+  ...(regionsAllowed && { regionsAllowed }),
   // KPHR is the publisher for the video
   publisher: {
     '@type': 'Organization',
