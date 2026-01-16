@@ -1,5 +1,6 @@
 ---
 import Button from '@/components/ui/Button.astro';
+import truncate from '@/utils/truncate.ts';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 const ids = [
@@ -31,7 +32,7 @@ const articles: CollectionEntry<'articles'>[] = (
                 </h3>
                 {entry.data.excerpt && (
                   <p class="text-muted-foreground mb-4 text-sm">
-                    {entry.data.excerpt}
+                    {truncate(entry.data.excerpt, 18)}
                   </p>
                 )}
                 <Button

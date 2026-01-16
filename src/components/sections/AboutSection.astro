@@ -1,9 +1,18 @@
 ---
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import Button from '@/components/ui/Button.astro';
 import Card from '@/components/ui/Card.astro';
 import CardContent from '@/components/ui/CardContent.astro';
-import hrImage from '@/images/hr-personel.png';
+
+const [aboutEntry] = await getCollection('about');
+
+if (!aboutEntry) {
+  throw new Error('About content entry is missing.');
+}
+
+const about = aboutEntry.data;
+const ctaHref = about.ctaButtonLink ?? '/newsletter';
 ---
 
 <section class="w-full px-6 py-16">
@@ -11,23 +20,21 @@ import hrImage from '@/images/hr-personel.png';
     <div class="mb-16 grid items-center gap-12 md:grid-cols-2">
       <div>
         <Image
-          src={hrImage}
-          alt="Aileen - HR Professional"
+          src={about.image}
+          alt={about.imageAlt}
           class="shadow-card w-full max-w-md rounded-lg"
           loading="lazy"
         />
       </div>
       <div>
         <h2 class="text-foreground mb-6 text-3xl font-bold md:text-4xl">
-          Hi, I'm Aileen
+          {about.heading}
         </h2>
         <p class="text-muted-foreground mb-6 text-lg leading-relaxed">
-          With over 10 years of HR experience across California startups and
-          international businesses, I help small business owners build
-          compliant, people-first teams—without the stress.
+          {about.intro}
         </p>
         <p class="text-primary text-lg font-medium italic">
-          Bilingual. Practical. People-centered.
+          {about.tagline}
         </p>
       </div>
     </div>
@@ -42,17 +49,17 @@ import hrImage from '@/images/hr-personel.png';
           <div class="text-4xl">🧩</div>
           <div>
             <h3 class="mb-2 text-xl font-bold md:text-2xl">
-              Want a free HR checklist for small business owners?
+              {about.ctaHeading}
             </h3>
           </div>
         </div>
         <Button
-          href="/newsletter"
+          href={ctaHref}
           variant="secondary"
           size="lg"
           class="text-primary flex bg-white font-semibold hover:bg-white/90"
         >
-          Download Free HR Toolkit
+          {about.ctaButtonText}
         </Button>
       </CardContent>
     </Card>
