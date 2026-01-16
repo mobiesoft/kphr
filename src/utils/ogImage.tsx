@@ -1,5 +1,8 @@
 import satori from 'satori';
 import type { ReactNode } from 'react';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 export interface OGImageOptions {
   title: string;
@@ -336,18 +339,14 @@ export async function generateOGImage(
   // Import Resvg dynamically to avoid bundling native .node in build
   const { Resvg } = await import('@resvg/resvg-js');
 
-  // Load fonts
-  const [dmSansRegular, dmSansBold, playfairBold] = await Promise.all([
-    fetch(
-      'https://cdn.jsdelivr.net/fontsource/fonts/dm-sans@latest/latin-400-normal.ttf',
-    ).then((res) => res.arrayBuffer()),
-    fetch(
-      'https://cdn.jsdelivr.net/fontsource/fonts/dm-sans@latest/latin-700-normal.ttf',
-    ).then((res) => res.arrayBuffer()),
-    fetch(
-      'https://cdn.jsdelivr.net/fontsource/fonts/playfair-display@latest/latin-700-normal.ttf',
-    ).then((res) => res.arrayBuffer()),
-  ]);
+  // Load fonts from static files
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const fontsDir = join(__dirname, '../../public/fonts');
+
+  const dmSansRegular = readFileSync(join(fontsDir, 'DMSans-Regular.ttf'));
+  const dmSansBold = readFileSync(join(fontsDir, 'DMSans-Bold.ttf'));
+  const playfairBold = readFileSync(join(fontsDir, 'PlayfairDisplay-Bold.ttf'));
 
   const formattedDate = pubDate
     ? new Date(pubDate).toLocaleDateString('en-US', {

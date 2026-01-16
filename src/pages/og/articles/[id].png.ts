@@ -1,6 +1,7 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import { generateOGImage } from '@/utils/ogImage';
+import sharp from 'sharp';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,12 +16,43 @@ async function getImageAsBase64(
     if (!imagePath) return undefined;
 
     const imageBuffer = await fs.readFile(imagePath);
-    const ext = path.extname(imagePath).toLowerCase().slice(1);
-    // Only support raster formats for background to keep Satori stable
-    const rasterExts = new Set(['png', 'jpg', 'jpeg', 'webp']);
-    if (!rasterExts.has(ext)) return undefined;
-    const mimeType = ext === 'jpg' ? 'jpeg' : ext;
-    return `data:image/${mimeType};base64,${imageBuffer.toString('base64')}`;
+
+    const originalSize = imageBuffer.length;
+    console.log(`Original image size: ${(originalSize / 1024).toFixed(2)}KB`);
+
+    // Compress image using sharp to reduce file size
+    // Resize to max 600px width (OG images are 1200x630, but we can scale down)
+    // and apply aggressive compression
+    const compressedBuffer = await Promise.race([
+      sharp(imageBuffer)
+        .resize(600, 400, { fit: 'cover', withoutEnlargement: true })
+        .png({ quality: 70, progressive: true })
+        .toBuffer(),
+      new Promise<Buffer>((_, reject) =>
+        setTimeout(() => reject(new Error('Image compression timeout')), 3000),
+      ),
+    ]);
+
+    const compressedSize = compressedBuffer.length;
+    const compressionRatio = (
+      (1 - compressedSize / originalSize) *
+      100
+    ).toFixed(2);
+    console.log(
+      `Compressed image size: ${(compressedSize / 1024).toFixed(2)}KB (${compressionRatio}% reduction)`,
+    );
+
+    // Limit compressed image size to prevent memory issues (max 200KB)
+    if (compressedBuffer.length > 200 * 1024) {
+      console.warn(
+        `Compressed image still too large (${(compressedSize / 1024).toFixed(2)}KB > 200KB), skipping:`,
+        imagePath,
+      );
+      return undefined;
+    }
+
+    const mimeType = 'png';
+    return `data:image/${mimeType};base64,${compressedBuffer.toString('base64')}`;
   } catch (error) {
     console.error('Error reading image:', error);
     return undefined;
