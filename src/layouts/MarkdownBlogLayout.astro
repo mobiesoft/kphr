@@ -99,7 +99,7 @@ const articleStructuredData = {
   datePublished: data.date.toISOString(),
   dateModified: data.date.toISOString(),
   author: {
-    '@type': 'Person',
+    '@type': 'Organization',
     name: data.author || SITE.author,
   },
   publisher: {
@@ -236,11 +236,21 @@ const faqPageSchema =
         <slot />
       </Prose>
 
-      {/* FAQ Accordion - displays if FAQs are provided */}
+      {/* FAQ Section - displays if FAQs are provided */}
       {
         data.faqs && data.faqs.length > 0 && (
           <div class="border-border mt-12 border-t pt-8">
-            <Accordion items={data.faqs} title="Frequently Asked Questions" />
+            <h2 class="text-foreground font-headfont mb-6 text-2xl font-bold">
+              Frequently Asked Questions
+            </h2>
+            <div class="space-y-6">
+              {data.faqs.map((faq: any) => (
+                <div class="space-y-2">
+                  <h3 class="text-foreground font-semibold">{faq.question}</h3>
+                  <p class="text-muted-foreground">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )
       }

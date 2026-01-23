@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import Button from '@/components/ui/Button.astro';
 import Card from '@/components/ui/Card.astro';
 import CardContent from '@/components/ui/CardContent.astro';
+import truncate from '@/utils/truncate';
 
 const [aboutEntry] = await getCollection('about');
 
@@ -31,8 +32,11 @@ const ctaHref = about.ctaButtonLink ?? '/newsletter';
           {about.heading}
         </h2>
         <p class="text-muted-foreground mb-6 text-lg leading-relaxed">
-          {about.intro}
+          {truncate(about.intro, 20)}
         </p>
+        <Button href="/about" variant="default" size="default" class="mb-6">
+          Learn more
+        </Button>
         <p class="text-primary text-lg font-medium italic">
           {about.tagline}
         </p>
