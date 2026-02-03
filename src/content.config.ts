@@ -18,7 +18,7 @@ const blogCollection = defineCollection({
       youtubeUrl: z.string().url().optional(),
       hasVideoSchema: z.boolean().optional().default(false),
       videoTitle: z.string().optional(),
-      videoUploadDate: z.string().optional(),
+      videoUploadDate: z.date().optional(),
       videoDescription: z.string().optional(),
       videoDuration: z.string().optional(),
       videoViewCount: z.number().optional(),
