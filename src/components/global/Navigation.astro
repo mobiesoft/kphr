@@ -4,6 +4,10 @@ import { Image } from 'astro:assets';
 import Button from '@/components/ui/Button.astro';
 import mainLogo from '@/images/main-logo.png';
 
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (path: string) =>
+  currentPath === path || currentPath.startsWith(`${path}/`);
+
 // Shared navigation items
 const navItems = [
   { label: 'Home', href: '/' },
@@ -40,7 +44,7 @@ const ctaItem = { label: 'Contact Us', href: '/contact' };
         navItems.map((item) => (
           <a
             href={item.href}
-            class="text-foreground hover:text-primary transition-colors"
+            class={`text-foreground hover:text-primary transition-colors ${isActive(item.href) ? 'text-primary font-semibold' : ''}`}
           >
             {item.label}
           </a>
@@ -64,7 +68,7 @@ const ctaItem = { label: 'Contact Us', href: '/contact' };
         navItems.map((item) => (
           <a
             href={item.href}
-            class="text-foreground hover:text-primary hover:bg-muted/40 focus:ring-primary block rounded-md px-3 py-2 transition-colors focus:ring-2 focus:outline-none"
+            class={`text-foreground hover:text-primary hover:bg-muted/40 focus:ring-primary block rounded-md px-3 py-2 transition-colors focus:ring-2 focus:outline-none ${isActive(item.href) ? 'text-primary font-semibold' : ''}`}
           >
             {item.label}
           </a>
