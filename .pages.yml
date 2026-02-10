@@ -153,10 +153,6 @@ content:
         label: Price Range
         type: string
         required: true
-      - name: rating
-        label: Rating
-        type: number
-        required: false
       - name: isFeatured
         label: Featured Resources
         type: boolean

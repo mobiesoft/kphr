@@ -44,7 +44,6 @@ const resourcesCollection = defineCollection({
       description: z.string(),
       category: z.string(),
       priceRange: z.string(),
-      rating: z.number().min(0).max(5).optional(),
       isFeatured: z.boolean().optional().default(false),
       image: image(),
       tags: z.array(z.string()).optional(),
